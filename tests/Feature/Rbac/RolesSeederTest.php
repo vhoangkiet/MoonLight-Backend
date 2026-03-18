@@ -14,8 +14,8 @@ class RolesSeederTest extends TestCase
     {
         $this->seed(RolesSeeder::class);
 
-        $this->assertDatabaseHas('roles', ['name' => 'Admin']);
-        $this->assertDatabaseHas('roles', ['name' => 'Staff']);
-        $this->assertDatabaseHas('roles', ['name' => 'Customer']);
+        $this->assertDatabaseHas('roles', ['name' => 'Admin', 'guard_name' => 'api']);
+        $this->assertDatabaseHas('roles', ['name' => 'Staff', 'guard_name' => 'api']);
+        $this->assertDatabaseHas('roles', ['name' => 'Customer', 'guard_name' => 'api']);
     }
 }

@@ -65,7 +65,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
             if ($e instanceof UnauthorizedException) {
                 return ApiResponse::error(
-                    message: $e->getMessage() ?: __('api.forbidden'),
+                    message: __('api.forbidden'),
                     status: Response::HTTP_FORBIDDEN,
                     code: 'FORBIDDEN',
                 );

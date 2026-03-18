@@ -13,7 +13,7 @@ class UserRoleTraitTest extends TestCase
 
     public function test_user_can_be_assigned_role(): void
     {
-        Role::create(['name' => 'Admin']);
+        Role::create(['name' => 'Admin', 'guard_name' => 'api']);
 
         $user = User::factory()->create();
         $user->assignRole('Admin');
@@ -23,9 +23,9 @@ class UserRoleTraitTest extends TestCase
 
     public function test_user_sync_roles_replaces_existing_roles(): void
     {
-        Role::create(['name' => 'Admin']);
-        Role::create(['name' => 'Staff']);
-        Role::create(['name' => 'Customer']);
+        Role::create(['name' => 'Admin', 'guard_name' => 'api']);
+        Role::create(['name' => 'Staff', 'guard_name' => 'api']);
+        Role::create(['name' => 'Customer', 'guard_name' => 'api']);
 
         $user = User::factory()->create();
         $user->assignRole('Admin');

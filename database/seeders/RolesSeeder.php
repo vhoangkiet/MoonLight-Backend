@@ -14,7 +14,6 @@ class RolesSeeder extends Seeder
     public function run(): void
     {
         foreach (['Admin', 'Staff', 'Customer'] as $roleName) {
-            Role::findOrCreate($roleName, 'web');
             Role::findOrCreate($roleName, 'api');
         }
 
