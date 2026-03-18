@@ -68,7 +68,7 @@ class AuthService
         $expiresAt = $now->addSeconds(self::OTP_TTL_SECONDS);
 
         if ($existing === null) {
-            $this->otpVerifications->createNew($email, $hash, $expiresAt);
+            $this->otpVerifications->createNew($email, $hash, $expiresAt, $now);
         } else {
             $existing->forceFill([
                 'otp_hash' => $hash,

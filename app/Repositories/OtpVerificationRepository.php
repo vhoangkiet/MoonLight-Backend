@@ -21,14 +21,18 @@ final class OtpVerificationRepository
             ->first();
     }
 
-    public function createNew(string $email, string $otpHash, CarbonImmutable $expiresAt): OtpVerification
-    {
+    public function createNew(
+        string $email,
+        string $otpHash,
+        CarbonImmutable $expiresAt,
+        CarbonImmutable $lastSentAt,
+    ): OtpVerification {
         return $this->model->newQuery()->create([
             'email' => $email,
             'otp_hash' => $otpHash,
             'expires_at' => $expiresAt,
             'attempts' => 0,
-            'last_sent_at' => $expiresAt,
+            'last_sent_at' => $lastSentAt,
             'status' => 'active',
         ]);
     }
