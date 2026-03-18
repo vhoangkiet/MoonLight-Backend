@@ -8,10 +8,13 @@
 - Guest identity: cookie `guest_key`.
   - Frontend/mobile phải đảm bảo gửi cookie trong mọi request liên quan cart/wishlist.
 
-## 3) UUID-first schema
-- Mọi bảng dùng `id` là UUID.
-- Mọi FK cũng dùng UUID (vd `user_id`, `product_id`, `variant_id`...).
-- Không dùng PostgreSQL enum. Nếu cần canonical list, dùng:
+## 3) ID & UUID conventions
+- Primary key:
+  - Mọi bảng dùng `id` là **bigint auto-increment** (mặc định Laravel).
+- Public UUID:
+  - Các bảng “giao tiếp bên ngoài/nhạy cảm” (vd `users`, `products`, `product_variants`, `orders`, ...) sẽ có thêm cột **`uuid`** (unique) để expose ra API.
+  - API nên dùng `uuid` trong URL/body thay vì `id` nội bộ.
+- Không dùng PostgreSQL enum cho `status`. Nếu cần canonical list, dùng:
   - constants trong code + validation rules
   - (tuỳ chọn) `CHECK` constraints trong migration (nhưng vẫn là string).
 
