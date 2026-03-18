@@ -7,7 +7,9 @@ Mục tiêu: ghi lại các quyết định “đã chốt” để triển khai
 
 ## D-DB-001 — Database & conventions
 - Database: **PostgreSQL**.
-- **Tất cả bảng dùng UUID làm primary key**.
+- Primary key:
+  - Sử dụng **`id` bigint auto-increment** mặc định của Laravel cho tất cả bảng (tương thích thư viện như Sanctum, Spatie, Cashier, MediaLibrary).
+  - Chỉ những bảng “giao tiếp bên ngoài/nhạy cảm” mới có thêm cột **`uuid`** để dùng làm **public id** trong API (FE/Mobile).
 - Các trường `status` dùng **string**, **không** dùng PostgreSQL enum.
 
 ## D-AUTH-001 — Authentication
