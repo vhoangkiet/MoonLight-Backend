@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UserRoleController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,4 +36,11 @@ Route::prefix('v1')
             Route::post('password/forgot', [AuthController::class, 'forgotPassword'])->name('password.forgot');
             Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.reset');
         });
+
+        Route::prefix('admin')
+            ->as('admin.')
+            ->middleware(['auth:api', 'role:Admin|Staff,api'])
+            ->group(function (): void {
+                Route::patch('users/{id}/role', [UserRoleController::class, 'update'])->name('users.role.update');
+            });
     });

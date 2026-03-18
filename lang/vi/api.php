@@ -18,4 +18,8 @@ return [
         'refresh_token_required' => 'Refresh token là bắt buộc.',
         'refresh_token_invalid' => 'Refresh token không hợp lệ hoặc đã hết hạn.',
     ],
+    'admin' => [
+        'role_required' => 'Vai trò là bắt buộc.',
+        'role_invalid' => 'Vai trò phải là một trong: Admin, Staff, Customer.',
+    ],
 ];

@@ -33,4 +33,8 @@ return [
             'reset_failed' => 'Unable to reset password.',
         ],
     ],
+    'admin' => [
+        'role_required' => 'Role is required.',
+        'role_invalid' => 'Role must be one of: Admin, Staff, Customer.',
+    ],
 ];

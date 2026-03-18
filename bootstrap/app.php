@@ -9,6 +9,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Spatie\Permission\Exceptions\UnauthorizedException;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
@@ -20,7 +24,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'role' => RoleMiddleware::class,
+            'permission' => PermissionMiddleware::class,
+            'role_or_permission' => RoleOrPermissionMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (Throwable $e, Request $request) {
@@ -50,6 +58,14 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($e instanceof AuthorizationException) {
                 return ApiResponse::error(
                     message: __('api.forbidden'),
+                    status: Response::HTTP_FORBIDDEN,
+                    code: 'FORBIDDEN',
+                );
+            }
+
+            if ($e instanceof UnauthorizedException) {
+                return ApiResponse::error(
+                    message: $e->getMessage() ?: __('api.forbidden'),
                     status: Response::HTTP_FORBIDDEN,
                     code: 'FORBIDDEN',
                 );
