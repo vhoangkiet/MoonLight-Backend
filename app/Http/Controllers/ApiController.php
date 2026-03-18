@@ -28,9 +28,13 @@ abstract class ApiController extends Controller
             return ApiResponse::error(
                 message: __($e->translationKey, $e->context),
                 status: $e->status,
-                code: $e->code,
+                code: $e->domainCode,
             );
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            if (app()->environment('testing', 'local')) {
+                throw $e;
+            }
+
             return ApiResponse::error(
                 message: __('api.unexpected_error'),
                 status: Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -39,4 +43,3 @@ abstract class ApiController extends Controller
         }
     }
 }
-

@@ -5,28 +5,15 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\Contracts\OAuthenticatable;
+use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements OAuthenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasUuids, Notifiable;
-
-    /**
-     * UUID không phải auto-increment.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
-     * UUID được lưu dạng string.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.

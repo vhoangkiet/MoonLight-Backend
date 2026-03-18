@@ -16,9 +16,7 @@ abstract class BaseRepository
     /**
      * @param  TModel  $model
      */
-    public function __construct(protected Model $model)
-    {
-    }
+    public function __construct(protected Model $model) {}
 
     /**
      * @return Builder<TModel>
@@ -73,7 +71,6 @@ abstract class BaseRepository
     }
 
     /**
-     * @param  int  $perPage
      * @return LengthAwarePaginator<TModel>
      */
     public function paginate(int $perPage = 15): LengthAwarePaginator
@@ -81,4 +78,3 @@ abstract class BaseRepository
         return $this->query()->paginate($perPage);
     }
 }
-
