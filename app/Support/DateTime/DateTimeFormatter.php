@@ -8,9 +8,7 @@ use DateTimeInterface;
 
 final class DateTimeFormatter
 {
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     public static function toIso8601(CarbonInterface|DateTimeInterface|null $value): ?string
     {
@@ -39,4 +37,3 @@ final class DateTimeFormatter
         return CarbonImmutable::instance($value)->format($format);
     }
 }
-

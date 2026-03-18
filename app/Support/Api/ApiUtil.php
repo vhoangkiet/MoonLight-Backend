@@ -13,9 +13,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 final class ApiUtil
 {
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * @param  array<string, mixed>|Arrayable<string, mixed>|JsonResource|null  $data
@@ -40,4 +38,3 @@ final class ApiUtil
         return ApiResponse::noContent();
     }
 }
-

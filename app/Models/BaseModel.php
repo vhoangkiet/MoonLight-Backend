@@ -23,4 +23,3 @@ abstract class BaseModel extends Model
      */
     public $incrementing = false;
 }
-
