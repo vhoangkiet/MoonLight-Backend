@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+
+abstract class BaseModel extends Model
+{
+    use HasUuids;
+
+    /**
+     * Laravel sẽ generate UUID string.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * UUID không phải auto-increment.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+}
+

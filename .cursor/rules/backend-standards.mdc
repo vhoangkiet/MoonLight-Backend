@@ -1,0 +1,47 @@
+---
+description: Quy chuẩn backend (Laravel) + Git commit
+alwaysApply: true
+---
+
+# Backend standards (Laravel 12) + Git commit
+
+## Coding conventions
+
+- Viết API theo cấu trúc **Controller → Service → Repository**.
+  - **Controller**: nhận request, gọi service, bắt lỗi và trả response.
+  - **Form Request**: validation + authorize (không validate inline trong controller).
+  - **Service**: chứa nghiệp vụ; *được phép throw lỗi nghiệp vụ*.
+  - **Repository**: chỉ xử lý truy vấn DB/QueryBuilder/Eloquent.
+
+- Response:
+  - Dùng **Laravel API Resources** cho mọi response data.
+  - Tất cả response JSON phải đi qua **ApiUtil/ApiResponse** để thống nhất format.
+
+- Exception handling:
+  - Có **Exception handler** để fallback về 1 format response chung.
+  - Trong service: throw các exception nghiệp vụ (có HTTP status + translation key).
+  - Trong controller: catch exception nghiệp vụ và trả response tương ứng.
+
+- Không dùng **magic number**:
+  - Dùng constant (vd `OtpPolicy::TTL_SECONDS`) hoặc config (`config('...')`).
+
+- Trả đúng RESTful API:
+  - 200/201/204/400/401/403/404/409/422/429/500 đúng ngữ cảnh.
+
+- Message:
+  - Không hardcode message string.
+  - Dùng **translate** (`__('...')`) để hỗ trợ đa ngôn ngữ.
+
+- Format code:
+  - Trước khi hoàn tất thay đổi PHP, chạy `./vendor/bin/pint`.
+
+## Git commit conventions
+
+- Commit message theo **Conventional Commits**:
+  - `feat: ...`, `fix: ...`, `refactor: ...`, `test: ...`, `docs: ...`, `chore: ...`
+  - Scope tuỳ chọn: `feat(auth): ...`
+
+- Nội dung commit:
+  - 1 commit = 1 mục đích rõ ràng.
+  - Message tập trung vào *vì sao* thay đổi (không liệt kê mọi file).
+
