@@ -16,6 +16,7 @@
         "nwidart/laravel-modules": "^13.0",
         "opcodesio/log-viewer": "^3.24",
         "spatie/laravel-medialibrary": "^11.21",
+        "spatie/laravel-permission": "^7.2",
         "spatie/laravel-sluggable": "^3.8"
     },
     "require-dev": {
