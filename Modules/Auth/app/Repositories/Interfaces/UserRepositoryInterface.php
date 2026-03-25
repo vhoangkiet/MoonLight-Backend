@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Repositories\Interfaces;
+namespace Modules\Auth\Repositories\Interfaces;
 
 use App\Models\User;
+use App\Repositories\Interfaces\BaseRepositoryInterface;
 
 interface UserRepositoryInterface extends BaseRepositoryInterface
 {

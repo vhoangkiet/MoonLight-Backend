@@ -118,4 +118,19 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Passport Client Configuration
+    |--------------------------------------------------------------------------
+    |
+    | These values are used to issue tokens via the password grant and
+    | refresh token grant.
+    |
+    */
+
+    'passport' => [
+        'client_id' => env('PASSPORT_PASSWORD_CLIENT_ID'),
+        'client_secret' => env('PASSPORT_PASSWORD_CLIENT_SECRET'),
+    ],
+
 ];

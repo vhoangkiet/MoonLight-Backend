@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace Modules\Auth\Services;
 
 use App\Models\User;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Collection;
+use Modules\Auth\Repositories\Interfaces\UserRepositoryInterface;
 
 class UserService extends BaseService
 {

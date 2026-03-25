@@ -13,7 +13,10 @@ abstract class BaseRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    abstract public function authorize(): bool;
+    public function authorize(): bool
+    {
+        return true;
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -25,13 +28,12 @@ abstract class BaseRequest extends FormRequest
     /**
      * Handle a failed validation attempt.
      *
-     *
      * @throws HttpResponseException
      */
     protected function failedValidation(Validator $validator): void
     {
         throw new HttpResponseException(response()->json([
-            'success' => 'false',
+            'success' => false, // Boolean instead of string
             'message' => 'Validation failed',
             'errors' => $validator->errors(),
         ], Response::HTTP_UNPROCESSABLE_ENTITY));
@@ -40,13 +42,12 @@ abstract class BaseRequest extends FormRequest
     /**
      * Handle a failed authorization attempt.
      *
-     *
      * @throws HttpResponseException
      */
     protected function failedAuthorization(): void
     {
         throw new HttpResponseException(response()->json([
-            'success' => 'false',
+            'success' => false, // Boolean instead of string
             'message' => 'This action is unauthorized.',
         ], Response::HTTP_FORBIDDEN));
     }

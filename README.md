@@ -57,6 +57,7 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## Project Links
 
 - [Git Commit Convention](docs/git-convention.md)
+- [Auth Module API](docs/auth-module.md)
 
 ## License
 
