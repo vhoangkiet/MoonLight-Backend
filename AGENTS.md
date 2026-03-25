@@ -9,7 +9,7 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
 
-- php - 8.2.29
+- php - 8.3.28
 - laravel/framework (LARAVEL) - v12
 - laravel/prompts (PROMPTS) - v0
 - laravel/boost (BOOST) - v2
@@ -17,6 +17,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - laravel/pail (PAIL) - v1
 - laravel/pint (PINT) - v1
 - laravel/sail (SAIL) - v1
+- laravel/telescope (TELESCOPE) - v5
 - phpunit/phpunit (PHPUNIT) - v11
 
 ## Conventions
@@ -231,20 +232,5 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - To run all tests: `php artisan test --compact`.
 - To run all tests in a file: `php artisan test --compact tests/Feature/ExampleTest.php`.
 - To filter on a particular test name: `php artisan test --compact --filter=testName` (recommended after making a change to a related file).
-
-=== git rules ===
-
-# Git Commit Convention
-
-- Follow the **Conventional Commits** standard.
-- **feat**: New features.
-- **fix**: Bug fixes.
-- **docs**: Documentation only.
-- **style**: Formatting, missing semi-colons, etc.
-- **refactor**: Code changes that neither fix a bug nor add a feature.
-- **perf**: Code changes that improve performance.
-- **test**: Adding missing tests or correcting existing tests.
-- **chore**: Changes to the build process or auxiliary tools and libraries.
-- Use imperative mood: "add" not "added".
 
 </laravel-boost-guidelines>
