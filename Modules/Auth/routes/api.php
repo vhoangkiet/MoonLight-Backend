@@ -29,11 +29,11 @@ Route::prefix('v1')->group(function () {
             ->middleware('throttle:3,1')
             ->name('auth.password.forgot');
 
-        // Route GET này để Laravel tạo link reset trong Email, nó sẽ redirect về FE
+        // This GET route allows Laravel to generate reset link in Email, it will redirect to FE
         Route::get('password/reset/{token}', function ($token) {
-            $frontendUrl = env('FRONTEND_URL', config('app.url'));
+            $frontendUrl = config('app.frontend_url', config('app.url'));
 
-            return redirect()->to($frontendUrl.'/password/reset?token='.$token.'&email='.request('email'));
+            return redirect()->to($frontendUrl.'/password/reset?token='.$token.'&email='.urlencode(request('email')));
         })->name('password.reset');
 
         Route::post('password/reset', [PasswordController::class, 'reset'])

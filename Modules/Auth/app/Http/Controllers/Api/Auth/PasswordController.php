@@ -17,7 +17,9 @@ class PasswordController extends BaseController
     ) {}
 
     /**
-     * Change the authenticated user's password.
+     * Change password (Authenticated).
+     *
+     * Require authenticated user to provide current password to change to new password.
      */
     public function change(ChangePasswordRequest $request): JsonResponse
     {
@@ -36,7 +38,9 @@ class PasswordController extends BaseController
     }
 
     /**
-     * Send a password reset link to the given email.
+     * Forgot password.
+     *
+     * Send a password reset link to the user's email.
      */
     public function forgot(ForgotPasswordRequest $request): JsonResponse
     {
@@ -48,7 +52,9 @@ class PasswordController extends BaseController
     }
 
     /**
-     * Reset the password using a token.
+     * Reset password.
+     *
+     * Use token from email to reset to new password.
      */
     public function reset(ResetPasswordRequest $request): JsonResponse
     {

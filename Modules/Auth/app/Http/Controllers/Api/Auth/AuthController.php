@@ -20,7 +20,9 @@ class AuthController extends BaseController
     ) {}
 
     /**
-     * Register a new user.
+     * Register a new account.
+     *
+     * Create a new user and assign default 'customer' role. Then send verification email.
      */
     public function register(RegisterRequest $request): JsonResponse
     {
@@ -36,7 +38,9 @@ class AuthController extends BaseController
     }
 
     /**
-     * Login and return access token.
+     * Login and receive Token.
+     *
+     * Authenticate via Email and Password. Return access_token and refresh_token.
      */
     public function login(LoginRequest $request): JsonResponse
     {
@@ -51,7 +55,9 @@ class AuthController extends BaseController
     }
 
     /**
-     * Refresh access token.
+     * Refresh Access Token.
+     *
+     * Use refresh_token to get a new pair of tokens.
      */
     public function refreshToken(RefreshTokenRequest $request): JsonResponse
     {
@@ -63,7 +69,9 @@ class AuthController extends BaseController
     }
 
     /**
-     * Logout the current user.
+     * Logout.
+     *
+     * Revoke the current token of the user.
      */
     public function logout(): JsonResponse
     {
@@ -77,7 +85,9 @@ class AuthController extends BaseController
     }
 
     /**
-     * Get the authenticated user's profile.
+     * View personal Profile.
+     *
+     * Return detailed information of the logged-in user with Roles.
      */
     public function profile(): JsonResponse
     {
@@ -91,7 +101,9 @@ class AuthController extends BaseController
     }
 
     /**
-     * Update the authenticated user's profile.
+     * Update Profile.
+     *
+     * Allow updating name and uploading avatar image.
      */
     public function updateProfile(UpdateProfileRequest $request): JsonResponse
     {

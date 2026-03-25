@@ -108,9 +108,9 @@ class AuthService
             'scope' => '',
         ], $params);
 
-        // Tạo request nội bộ gửi đến route /oauth/token
+        // Create internal request to /oauth/token route
         $request = Request::create('/oauth/token', 'POST', $params);
-        $response = app()->handle($request); // Gửi request đi và nhận response
+        $response = app()->handle($request); // Send request and receive response
 
         $data = json_decode($response->getContent(), true);
 

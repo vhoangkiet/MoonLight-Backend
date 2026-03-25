@@ -4,15 +4,23 @@ namespace Modules\Auth\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class VerificationController extends BaseController
 {
-    public function verify(Request $request, int $id, string $hash)
+    /**
+     * Verify Email address.
+     *
+     * Handle verification link from Email. If successful, redirect to Frontend.
+     *
+     * @unauthenticated
+     */
+    public function verify(Request $request, int $id, string $hash): RedirectResponse
     {
         $user = User::findOrFail($id);
-        $frontendUrl = env('FRONTEND_URL', config('app.url'));
+        $frontendUrl = config('app.frontend_url', config('app.url'));
 
         if (! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
             return redirect()->to($frontendUrl.'/verify-status?status=error&message=Invalid verification link');
@@ -28,7 +36,9 @@ class VerificationController extends BaseController
     }
 
     /**
-     * Resend the email verification notification.
+     * Resend verification email.
+     *
+     * Send verification code/link again to the logged-in user's email.
      */
     public function resend(Request $request): JsonResponse
     {

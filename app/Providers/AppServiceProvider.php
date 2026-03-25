@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use Carbon\CarbonInterval;
+use Dedoc\Scramble\Scramble;
+use Dedoc\Scramble\Support\Generator\OpenApi;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Passport\Passport;
@@ -39,20 +41,19 @@ class AppServiceProvider extends ServiceProvider
         Passport::refreshTokensExpireIn(CarbonInterval::days(30));
         Passport::personalAccessTokensExpireIn(CarbonInterval::months(6));
 
-        Log::debug('Enabling Passport Password Grant');
         Passport::enablePasswordGrant();
 
         // Customize Verification Email
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
             return (new MailMessage)
-                ->subject('🌖 Chào mừng fen đến với MoonLight!')
-                ->greeting('Chào '.($notifiable->first_name ?: 'fen').' ơi!')
-                ->line('Rất vui vì fen đã đồng ý làm một thành viên của MoonLight.')
-                ->line('Để bắt đầu "quẩy", fen vui lòng bấm nút xác thực email bên dưới giúp mình nhé:')
-                ->action('🚀 Xác thực tài khoản ngay', $url)
-                ->line('Link này sẽ hết hạn sau '.config('auth.verification.expire', 60).' phút nha.')
-                ->line('Nếu fen không đăng ký tài khoản thì hãy cứ bỏ qua mail này, hông sao hết nè!')
-                ->salutation('Trân trọng,'.PHP_EOL.'Team MoonLight 🌓');
+                ->subject('🌖 Welcome to MoonLight!')
+                ->greeting('Hello '.($notifiable->first_name ?: 'friend').'!')
+                ->line('We are very happy that you have agreed to become a member of MoonLight.')
+                ->line('To get started, please click the email verification button below:')
+                ->action('🚀 Verify Account Now', $url)
+                ->line('This link will expire after '.config('auth.verification.expire', 60).' minutes.')
+                ->line('If you did not register an account, please ignore this email, it is okay!')
+                ->salutation('Best regards,'.PHP_EOL.'MoonLight Team 🌓');
         });
 
         // Customize Reset Password Email
@@ -63,14 +64,21 @@ class AppServiceProvider extends ServiceProvider
             ], false));
 
             return (new MailMessage)
-                ->subject('🌖 Yêu cầu đặt lại mật khẩu MoonLight')
-                ->greeting('Chào fen!')
-                ->line('Có vẻ như fen đã quên mật khẩu của mình?')
-                ->line('Đừng lo, chuyện này xảy ra như cơm bữa ấy mà. Bấm nút dưới đây để đặt lại mật khẩu mới nha:')
-                ->action('🔑 Đặt lại mật khẩu', $url)
-                ->line('Link này sẽ hết hạn sau '.config('auth.passwords.users.expire').' phút.')
-                ->line('Nếu fen hổng có yêu cầu đổi mật khẩu, thì cứ kệ cái mail này, mật khẩu cũ vẫn an toàn nhé!')
-                ->salutation('Thân ái,'.PHP_EOL.'Team MoonLight 🌓');
+                ->subject('🌖 MoonLight Password Reset Request')
+                ->greeting('Hello friend!')
+                ->line('It seems you have forgotten your password?')
+                ->line('Don\'t worry, this happens all the time. Click the button below to reset your password:')
+                ->action('🔑 Reset Password', $url)
+                ->line('This link will expire after '.config('auth.passwords.users.expire', 60).' minutes.')
+                ->line('If you did not request a password reset, please ignore this email, your old password is still safe!')
+                ->salutation('Best regards,'.PHP_EOL.'MoonLight Team 🌓');
+        });
+
+        // Configure Bearer Token for Scramble
+        Scramble::afterOpenApiGenerated(function (OpenApi $openApi) {
+            $openApi->secure(
+                SecurityScheme::http('bearer')
+            );
         });
     }
 }

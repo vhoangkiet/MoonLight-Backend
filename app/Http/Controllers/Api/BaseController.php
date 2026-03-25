@@ -8,13 +8,14 @@ use DomainException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Wrapper for controller to catch errors from service and return proper JSON format.
+ */
 abstract class BaseController extends Controller
 {
     use ApiResponse;
 
     /**
-     * Wrapper để controller bắt lỗi từ service và trả JSON đúng format.
-     *
      * @param  callable(): JsonResponse|array<string, mixed>|null  $callback
      */
     protected function execute(callable $callback): JsonResponse
