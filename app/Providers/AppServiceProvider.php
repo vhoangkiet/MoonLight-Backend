@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use Carbon\CarbonInterval;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,5 +37,9 @@ class AppServiceProvider extends ServiceProvider
                 ->mixedCase()
                 ->uncompromised();
         });
+
+        Passport::tokensExpireIn(CarbonInterval::days(15));
+        Passport::refreshTokensExpireIn(CarbonInterval::days(30));
+        Passport::personalAccessTokensExpireIn(CarbonInterval::months(6));
     }
 }
