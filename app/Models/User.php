@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements OAuthenticatable
+class User extends Authenticatable implements HasMedia, MustVerifyEmail, OAuthenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, HasRoles, InteractsWithMedia, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -21,9 +25,14 @@ class User extends Authenticatable implements OAuthenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'first_name',
+        'last_name',
         'name',
         'email',
         'password',
+        'status',
+        'last_login_at',
+        'last_login_ip',
     ];
 
     /**
@@ -45,7 +54,34 @@ class User extends Authenticatable implements OAuthenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the user's full name.
+     */
+    public function getFullNameAttribute(): string
+    {
+        return trim("{$this->first_name} {$this->last_name}");
+    }
+
+    /**
+     * Scope a query to only include active users.
+     */
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', 'active');
+    }
+
+    /**
+     * Register the media collections for this model.
+     */
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('avatar')
+            ->singleFile()
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
     }
 }

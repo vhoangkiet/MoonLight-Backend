@@ -2,8 +2,10 @@
 
 namespace Modules\Auth\Providers;
 
+use Laravel\Passport\Passport;
+use Modules\Auth\Repositories\Eloquent\UserRepository;
+use Modules\Auth\Repositories\Interfaces\UserRepositoryInterface;
 use Nwidart\Modules\Support\ModuleServiceProvider;
-use Illuminate\Console\Scheduling\Schedule;
 
 class AuthServiceProvider extends ModuleServiceProvider
 {
@@ -35,12 +37,25 @@ class AuthServiceProvider extends ModuleServiceProvider
     ];
 
     /**
-     * Define module schedules.
-     * 
-     * @param $schedule
+     * Register any application services.
      */
-    // protected function configureSchedules(Schedule $schedule): void
-    // {
-    //     $schedule->command('inspire')->hourly();
-    // }
+    public function register(): void
+    {
+        parent::register();
+
+        $this->app->singleton(
+            UserRepositoryInterface::class,
+            UserRepository::class
+        );
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        parent::boot();
+
+        Passport::enablePasswordGrant();
+    }
 }

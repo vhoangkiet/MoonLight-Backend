@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace Modules\Auth\Http\Requests;
 
+use App\Http\Requests\BaseRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\Rules\Password;
 

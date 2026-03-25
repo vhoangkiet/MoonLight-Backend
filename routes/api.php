@@ -1,8 +1,4 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+// This file is now managed by individual modules.
+// Add global API routes here if needed.
