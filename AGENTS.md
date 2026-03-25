@@ -232,4 +232,19 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - To run all tests in a file: `php artisan test --compact tests/Feature/ExampleTest.php`.
 - To filter on a particular test name: `php artisan test --compact --filter=testName` (recommended after making a change to a related file).
 
+=== git rules ===
+
+# Git Commit Convention
+
+- Follow the **Conventional Commits** standard.
+- **feat**: New features.
+- **fix**: Bug fixes.
+- **docs**: Documentation only.
+- **style**: Formatting, missing semi-colons, etc.
+- **refactor**: Code changes that neither fix a bug nor add a feature.
+- **perf**: Code changes that improve performance.
+- **test**: Adding missing tests or correcting existing tests.
+- **chore**: Changes to the build process or auxiliary tools and libraries.
+- Use imperative mood: "add" not "added".
+
 </laravel-boost-guidelines>
