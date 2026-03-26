@@ -87,3 +87,14 @@ FRONTEND_URL=http://localhost:3000
 - **Passport v13 internal handling**: Sử dụng `app()->handle($request)` để thay thế `Route::dispatch`, khắc phục lỗi grant type trong Laravel 12.
 - **Rate Limiting**: Giới hạn đăng nhập (5 lần/phút) để chống Brute-force.
 - **Standardized Response**: Mọi API đều trả về format chuẩn thông qua `BaseController::execute()`.
+
+## Change Log
+
+### 2026-03-26
+- **Register**:
+  - Không bắt buộc gửi `password_confirmation` (bỏ rule `confirmed`).
+  - Không còn gửi email verify sau khi đăng ký.
+- **Login**:
+  - Không yêu cầu email đã verify (`email_verified_at` có thể `null` vẫn đăng nhập được).
+- **API message**:
+  - Message khi đăng ký đổi thành: `Registration successful.`

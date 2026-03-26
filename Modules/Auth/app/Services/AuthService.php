@@ -5,7 +5,6 @@ namespace Modules\Auth\Services;
 use App\Exceptions\DomainException;
 use App\Models\User;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +20,7 @@ class AuthService
     ) {}
 
     /**
-     * Register a new user and send verification email.
+     * Register a new user.
      *
      * @param  array{first_name: string, last_name: string, email: string, password: string}  $data
      */
@@ -32,8 +31,6 @@ class AuthService
 
         $user = $this->userRepository->create($data);
         $user->assignRole('customer');
-
-        event(new Registered($user));
 
         Log::info('User registered', ['user_id' => $user->id, 'email' => $user->email]);
 

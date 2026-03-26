@@ -22,7 +22,7 @@ class AuthController extends BaseController
     /**
      * Register a new account.
      *
-     * Create a new user and assign default 'customer' role. Then send verification email.
+     * Create a new user and assign default 'customer' role.
      */
     public function register(RegisterRequest $request): JsonResponse
     {
@@ -31,7 +31,7 @@ class AuthController extends BaseController
 
             return $this->successResponse(
                 new AuthResource($user),
-                'Registration successful. Please check your email to verify your account.',
+                'Registration successful.',
                 Response::HTTP_CREATED
             );
         });
