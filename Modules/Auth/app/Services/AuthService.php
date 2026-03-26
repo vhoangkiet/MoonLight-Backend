@@ -60,10 +60,6 @@ class AuthService
             throw new DomainException('Your account has been disabled.', 403);
         }
 
-        if (! $user->hasVerifiedEmail()) {
-            throw new DomainException('Please verify your email address before logging in.', 403);
-        }
-
         $tokenResponse = $this->issueToken([
             'grant_type' => 'password',
             'username' => $credentials['email'],
