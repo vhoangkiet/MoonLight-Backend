@@ -2,8 +2,10 @@
 
 namespace Modules\Product\Providers;
 
-use Nwidart\Modules\Support\ModuleServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
+use Modules\Product\Repositories\Eloquent\CategoryRepository;
+use Modules\Product\Repositories\Interfaces\CategoryRepositoryInterface;
+use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class ProductServiceProvider extends ModuleServiceProvider
 {
@@ -35,9 +37,22 @@ class ProductServiceProvider extends ModuleServiceProvider
     ];
 
     /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        parent::register();
+
+        $this->app->singleton(
+            CategoryRepositoryInterface::class,
+            CategoryRepository::class
+        );
+    }
+
+    /**
      * Define module schedules.
-     * 
-     * @param $schedule
+     *
+     * @param  $schedule
      */
     // protected function configureSchedules(Schedule $schedule): void
     // {

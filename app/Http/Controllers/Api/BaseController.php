@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\DomainException;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
-use DomainException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,7 +31,7 @@ abstract class BaseController extends Controller
         } catch (DomainException $e) {
             return $this->errorResponse(
                 message: $e->getMessage(),
-                code: $e->getCode(),
+                code: ($e->getCode() >= 400 && $e->getCode() < 600) ? $e->getCode() : Response::HTTP_BAD_REQUEST,
             );
         } catch (\Throwable $e) {
             if (app()->environment('testing', 'local')) {
@@ -40,7 +40,7 @@ abstract class BaseController extends Controller
 
             return $this->errorResponse(
                 message: 'Unexpected error',
-                code: empty($e->getCode()) ? Response::HTTP_BAD_REQUEST : $e->getCode(),
+                code: ($e->getCode() >= 400 && $e->getCode() < 600) ? $e->getCode() : Response::HTTP_BAD_REQUEST,
             );
         }
     }
