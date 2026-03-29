@@ -16,7 +16,7 @@ trait ApiResponse
         int $code = Response::HTTP_OK
     ): JsonResponse {
         return response()->json([
-            'success' => 'true',
+            'success' => true,
             'message' => $message,
             'data' => $data,
         ], $code);
@@ -31,7 +31,7 @@ trait ApiResponse
         mixed $errors = null
     ): JsonResponse {
         return response()->json([
-            'success' => 'false',
+            'success' => false,
             'message' => $message,
             'errors' => $errors,
         ], $code);
