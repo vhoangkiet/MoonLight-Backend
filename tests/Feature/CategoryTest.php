@@ -119,7 +119,7 @@ class CategoryTest extends TestCase
         $response = $this->actingAs($this->admin, 'api')
             ->deleteJson("/api/v1/admin/categories/{$parent->id}");
 
-        $response->assertStatus(422)
+        $response->assertStatus(409)
             ->assertJson(['message' => 'Cannot delete category with sub-categories']);
     }
 

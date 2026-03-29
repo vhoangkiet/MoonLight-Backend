@@ -122,8 +122,11 @@ class ProductVariantController extends BaseController
     public function updateStock(int $id): JsonResponse
     {
         return $this->execute(function () use ($id): JsonResponse {
-            $quantity = request('stock', 0);
-            $updated = $this->variantService->updateStock($id, $quantity);
+            $validated = validator(request()->all(), [
+                'stock' => ['required', 'integer', 'min:0'],
+            ])->validate();
+
+            $updated = $this->variantService->updateStock($id, $validated['stock']);
 
             if (! $updated) {
                 return $this->errorResponse('Variant not found', Response::HTTP_NOT_FOUND);

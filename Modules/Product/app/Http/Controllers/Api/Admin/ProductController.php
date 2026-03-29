@@ -103,7 +103,8 @@ class ProductController extends BaseController
 
             $this->productService->updateProduct($id, $request->validated());
 
-            $product->load(['category', 'variants', 'discounts']);
+            $product = $this->productService->find($id);
+            $product?->load(['category', 'variants', 'discounts']);
 
             return $this->successResponse(
                 new ProductDetailResource($product),

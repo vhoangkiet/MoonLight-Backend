@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Product\Database\Factories\ProductFactory;
 use Modules\Product\Enums\ProductStatus;
 use Modules\Product\Enums\VariantStatus;
 
@@ -63,5 +64,10 @@ class Product extends Model
     public function scopeByCategory($query, $categoryId)
     {
         return $query->where('category_id', $categoryId);
+    }
+
+    protected static function newFactory()
+    {
+        return ProductFactory::new();
     }
 }

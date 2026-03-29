@@ -52,10 +52,10 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
         $allowedSortFields = ['name', 'created_at', 'id'];
         $sortBy = in_array($filters['sort_by'] ?? 'created_at', $allowedSortFields, true)
-            ? $filters['sort_by']
+            ? ($filters['sort_by'] ?? 'created_at')
             : 'created_at';
         $sortOrder = in_array($filters['sort_order'] ?? 'desc', ['asc', 'desc'], true)
-            ? $filters['sort_order']
+            ? ($filters['sort_order'] ?? 'desc')
             : 'desc';
 
         $query->orderBy($sortBy, $sortOrder);

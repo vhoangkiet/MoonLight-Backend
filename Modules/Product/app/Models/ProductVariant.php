@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Product\Database\Factories\ProductVariantFactory;
 use Modules\Product\Enums\VariantStatus;
 
 class ProductVariant extends Model
@@ -59,5 +60,10 @@ class ProductVariant extends Model
         $productName = $this->product?->name ?? 'Unknown Product';
 
         return "{$productName} - {$this->shape} {$this->length} {$this->tonal_palette} ({$this->size})";
+    }
+
+    protected static function newFactory()
+    {
+        return ProductVariantFactory::new();
     }
 }

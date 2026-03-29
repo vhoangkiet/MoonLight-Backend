@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Modules\Product\Database\Factories\VoucherFactory;
 
 class Voucher extends Model
 {
@@ -121,5 +122,10 @@ class Voucher extends Model
 
             $this->increment('usage_count');
         });
+    }
+
+    protected static function newFactory()
+    {
+        return VoucherFactory::new();
     }
 }

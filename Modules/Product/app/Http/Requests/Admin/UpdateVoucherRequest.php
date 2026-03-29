@@ -36,10 +36,23 @@ class UpdateVoucherRequest extends FormRequest
             'valid_until' => [
                 'nullable',
                 'date',
-                Rule::when(
-                    fn () => $this->input('valid_from') !== null || $this->route('id') !== null,
-                    ['after_or_equal:'.($this->input('valid_from') ?? $this->route('id')?->valid_from ?? 'today')]
-                ),
+                'after_or_equal:valid_from',
+                function ($attribute, $value, $fail) {
+                    $validFrom = $this->input('valid_from');
+                    
+                    // If valid_from not provided in request, get from existing voucher
+                    if ($validFrom === null && $this->route('id')) {
+                        $voucher = \Modules\Product\Models\Voucher::find($this->route('id'));
+                        if ($voucher) {
+                            $validFrom = $voucher->valid_from;
+                        }
+                    }
+                    
+                    // If we have a valid_from date, validate valid_until against it
+                    if ($validFrom && $value && $value < $validFrom) {
+                        $fail('The valid until date must be after or equal to the valid from date.');
+                    }
+                },
             ],
             'is_active' => ['nullable', 'boolean'],
         ];
