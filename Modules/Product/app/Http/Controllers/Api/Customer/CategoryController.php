@@ -8,6 +8,7 @@ use Modules\Product\Enums\CategoryStatus;
 use Modules\Product\Http\Resources\CategoryDetailResource;
 use Modules\Product\Http\Resources\CategoryTreeResource;
 use Modules\Product\Services\CategoryService;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @tags Customer - Categories
@@ -37,7 +38,7 @@ class CategoryController extends BaseController
             $category = $this->categoryService->findBySlug($slug, CategoryStatus::ACTIVE->value);
 
             if (! $category) {
-                return $this->errorResponse('Category not found', 404);
+                return $this->errorResponse('Category not found', Response::HTTP_NOT_FOUND);
             }
 
             $category->load(['children' => function ($query) {

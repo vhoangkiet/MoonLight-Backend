@@ -93,9 +93,17 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
                 throw new DomainException('One or more category IDs do not exist', Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
+            // Build CASE statement for batch update
+            $cases = [];
             foreach ($orderedIds as $position => $id) {
-                $this->model->where('id', $id)->update(['position' => $position]);
+                $cases[] = "WHEN id = {$id} THEN {$position}";
             }
+
+            $tableName = $this->model->getTable();
+            $caseStatement = implode(' ', $cases);
+            $idList = implode(',', $ids);
+
+            DB::update("UPDATE {$tableName} SET position = CASE {$caseStatement} ELSE position END WHERE id IN ({$idList})");
 
             return true;
         });
