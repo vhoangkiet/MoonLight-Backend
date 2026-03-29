@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use Modules\Auth\Http\Controllers\Api\Auth\AuthController;
 use Modules\Auth\Http\Controllers\Api\Auth\PasswordController;
 use Modules\Auth\Http\Controllers\Api\Auth\VerificationController;
-use Modules\Auth\Http\Controllers\Api\UserController;
 
 Route::prefix('v1')->group(function () {
     /*
@@ -61,15 +60,8 @@ Route::prefix('v1')->group(function () {
         Route::put('profile', [AuthController::class, 'updateProfile'])
             ->name('auth.profile.update');
 
-        // Password (Authenticated)
-        Route::put('password/change', [PasswordController::class, 'change'])
-            ->name('auth.password.change');
-
         // Email Verification (Authenticated)
         Route::post('email/resend', [VerificationController::class, 'resend'])
             ->name('verification.resend');
-
-        // User Management
-        Route::apiResource('users', UserController::class);
     });
 });

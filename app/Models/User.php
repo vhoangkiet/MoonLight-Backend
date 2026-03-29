@@ -6,12 +6,14 @@ use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasMedia, MustVerifyEmail, OAuthenticatable
@@ -29,6 +31,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, OAuthen
         'last_name',
         'name',
         'email',
+        'phone',
+        'avatar',
         'password',
         'status',
         'last_login_at',
@@ -76,12 +80,36 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, OAuthen
     }
 
     /**
-     * Register the media collections for this model.
+     * Get the addresses for the user.
+     */
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    /**
+     * Get the default address for the user.
+     */
+    public function defaultAddress(): ?Address
+    {
+        return $this->addresses()->where('is_default', true)->first();
+    }
+
+    /**
+     * Register the media collections for the user.
      */
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')
             ->singleFile()
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+    }
+
+    /**
+     * Get the avatar URL attribute.
+     */
+    public function getAvatarAttribute(): ?string
+    {
+        return $this->getFirstMediaUrl('avatar');
     }
 }
