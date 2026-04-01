@@ -4,6 +4,7 @@ namespace Modules\Auth\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Models\User;
+use Illuminate\Support\Facades\Cookie;
 use Modules\Auth\Http\Requests\Auth\LoginRequest;
 use Modules\Auth\Http\Requests\Auth\RefreshTokenRequest;
 use Modules\Auth\Http\Requests\Auth\RegisterRequest;
@@ -50,7 +51,23 @@ class AuthController extends BaseController
                 $request->ip()
             );
 
-            return $this->successResponse($tokens, 'Login successful.');
+            $cookie = Cookie::make(
+                'auth_token',
+                $tokens['refresh_token'],
+                60 * 24 * 30, // 30 days
+                '/',
+                null,
+                true,  // Secure - bắt buộc true khi sameSite='none'
+                true,  // HttpOnly
+                false,
+                'none' // Cho phép cross-domain
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Login successful.',
+                'data' => $tokens
+            ], Response::HTTP_OK)->cookie($cookie);
         });
     }
 
