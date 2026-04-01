@@ -38,7 +38,11 @@ class AppServiceProvider extends ServiceProvider
             return Password::min(8);
         });
 
-        Passport::tokensExpireIn(CarbonInterval::days(15));
+        if (app()->environment('local')) {
+            Passport::tokensExpireIn(CarbonInterval::minutes(1));
+        } else {
+            Passport::tokensExpireIn(CarbonInterval::days(15));
+        }
         Passport::refreshTokensExpireIn(CarbonInterval::days(30));
         Passport::personalAccessTokensExpireIn(CarbonInterval::months(6));
 
