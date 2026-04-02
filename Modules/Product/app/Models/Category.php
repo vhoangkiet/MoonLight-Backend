@@ -76,23 +76,29 @@ class Category extends Model
 
     public function getAllDescendantIds(): array
     {
-        return DB::table('category_closure')
-            ->join('categories', 'category_closure.descendant_id', '=', 'categories.id')
-            ->where('category_closure.ancestor_id', $this->id)
-            ->where('category_closure.depth', '>', 0)
-            ->whereNull('categories.deleted_at')
-            ->pluck('category_closure.descendant_id')
+        $tableName = (new self)->getTable();
+        $closureTableName = 'category_closure';
+
+        return DB::table($closureTableName)
+            ->join($tableName, "$closureTableName.descendant_id", '=', "$tableName.id")
+            ->where("$closureTableName.ancestor_id", $this->id)
+            ->where("$closureTableName.depth", '>', 0)
+            ->whereNull("$tableName.deleted_at")
+            ->pluck("$closureTableName.descendant_id")
             ->toArray();
     }
 
     public function getAllAncestorIds(): array
     {
-        return DB::table('category_closure')
-            ->join('categories', 'category_closure.ancestor_id', '=', 'categories.id')
-            ->where('category_closure.descendant_id', $this->id)
-            ->where('category_closure.depth', '>', 0)
-            ->whereNull('categories.deleted_at')
-            ->pluck('category_closure.ancestor_id')
+        $tableName = (new self)->getTable();
+        $closureTableName = 'category_closure';
+
+        return DB::table($closureTableName)
+            ->join($tableName, "$closureTableName.ancestor_id", '=', "$tableName.id")
+            ->where("$closureTableName.descendant_id", $this->id)
+            ->where("$closureTableName.depth", '>', 0)
+            ->whereNull("$tableName.deleted_at")
+            ->pluck("$closureTableName.ancestor_id")
             ->toArray();
     }
 
@@ -103,6 +109,7 @@ class Category extends Model
 
         return Product::whereIn('category_id', $allCategoryIds)
             ->where('status', ProductStatus::ACTIVE)
+            ->whereNull('deleted_at')
             ->count();
     }
 
@@ -114,12 +121,15 @@ class Category extends Model
 
     public function isDescendantOf(int $categoryId): bool
     {
-        return DB::table('category_closure')
-            ->join('categories', 'category_closure.ancestor_id', '=', 'categories.id')
-            ->where('category_closure.ancestor_id', $categoryId)
-            ->where('category_closure.descendant_id', $this->id)
-            ->where('category_closure.depth', '>', 0)
-            ->whereNull('categories.deleted_at')
+        $tableName = (new self)->getTable();
+        $closureTableName = 'category_closure';
+
+        return DB::table($closureTableName)
+            ->join($tableName, "$closureTableName.ancestor_id", '=', "$tableName.id")
+            ->where("$closureTableName.ancestor_id", $categoryId)
+            ->where("$closureTableName.descendant_id", $this->id)
+            ->where("$closureTableName.depth", '>', 0)
+            ->whereNull("$tableName.deleted_at")
             ->exists();
     }
 

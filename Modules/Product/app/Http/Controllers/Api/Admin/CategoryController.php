@@ -15,6 +15,7 @@ use Modules\Product\Http\Resources\CategoryDetailResource;
 use Modules\Product\Http\Resources\CategoryResource;
 use Modules\Product\Http\Resources\CategoryTreeResource;
 use Modules\Product\Services\CategoryService;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @tags Admin - Category Management
@@ -59,9 +60,13 @@ class CategoryController extends BaseController
     public function tree(Request $request): JsonResponse
     {
         return $this->execute(function () use ($request): JsonResponse {
+            $validated = validator($request->all(), [
+                'status' => ['nullable', 'string', 'in:active,inactive'],
+            ])->validate();
+
             $filters = [];
-            if ($request->has('status')) {
-                $filters['status'] = $request->input('status');
+            if (isset($validated['status'])) {
+                $filters['status'] = $validated['status'];
             }
 
             $tree = $this->categoryService->getCategoryTree($filters);
@@ -78,7 +83,7 @@ class CategoryController extends BaseController
         return $this->execute(function () use ($request): JsonResponse {
             $category = $this->categoryService->createCategory($request->validated());
 
-            return $this->successResponse(new CategoryDetailResource($category), 'Category created successfully', 201);
+            return $this->successResponse(new CategoryDetailResource($category), 'Category created successfully', Response::HTTP_CREATED);
         });
     }
 
@@ -91,7 +96,7 @@ class CategoryController extends BaseController
             $category = $this->categoryService->findWithRelations($id, ['parent', 'children', 'products']);
 
             if (! $category) {
-                return $this->errorResponse('Category not found', 404);
+                return $this->errorResponse('Category not found', Response::HTTP_NOT_FOUND);
             }
 
             return $this->successResponse(new CategoryDetailResource($category), 'Category retrieved successfully');
@@ -107,7 +112,7 @@ class CategoryController extends BaseController
             $category = $this->categoryService->findWithRelations($id, ['parent', 'children', 'products']);
 
             if (! $category) {
-                return $this->errorResponse('Category not found', 404);
+                return $this->errorResponse('Category not found', Response::HTTP_NOT_FOUND);
             }
 
             $this->categoryService->updateCategory($id, $request->validated());
@@ -129,7 +134,7 @@ class CategoryController extends BaseController
             $deleted = $this->categoryService->deleteCategory($id);
 
             if (! $deleted) {
-                return $this->errorResponse('Category not found', 404);
+                return $this->errorResponse('Category not found', Response::HTTP_NOT_FOUND);
             }
 
             return $this->successResponse(null, 'Category deleted successfully');
@@ -147,13 +152,13 @@ class CategoryController extends BaseController
             $updated = $this->categoryService->updateStatus($id, $status);
 
             if (! $updated) {
-                return $this->errorResponse('Category not found', 404);
+                return $this->errorResponse('Category not found', Response::HTTP_NOT_FOUND);
             }
 
             $category = $this->categoryService->findWithRelations($id, ['parent', 'children']);
 
             if (! $category) {
-                return $this->errorResponse('Category not found', 404);
+                return $this->errorResponse('Category not found', Response::HTTP_NOT_FOUND);
             }
 
             return $this->successResponse(new CategoryDetailResource($category), 'Category status updated successfully');
