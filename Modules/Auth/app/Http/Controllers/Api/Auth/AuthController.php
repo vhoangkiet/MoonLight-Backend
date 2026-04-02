@@ -66,7 +66,7 @@ class AuthController extends BaseController
             return response()->json([
                 'success' => true,
                 'message' => 'Login successful.',
-                'data' => $tokens
+                'data' => $tokens,
             ], Response::HTTP_OK)->cookie($cookie);
         });
     }
@@ -80,8 +80,23 @@ class AuthController extends BaseController
     {
         return $this->execute(function () use ($request): JsonResponse {
             $tokens = $this->authService->refreshToken($request->validated('refresh_token'));
+            $cookie = Cookie::make(
+                'auth_token',
+                $tokens['refresh_token'],
+                60 * 24 * 30, // 30 days
+                '/',
+                null,
+                true,  // Secure - bắt buộc true khi sameSite='none'
+                true,  // HttpOnly
+                false,
+                'none' // Cho phép cross-domain
+            );
 
-            return $this->successResponse($tokens, 'Token refreshed successfully.');
+            return response()->json([
+                'success' => true,
+                'message' => 'Login successful.',
+                'data' => $tokens,
+            ], Response::HTTP_OK)->cookie($cookie);
         });
     }
 
