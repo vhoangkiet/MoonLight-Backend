@@ -21,6 +21,13 @@ class ProductController extends BaseController
 {
     public function __construct(protected ProductService $productService) {}
 
+    /**
+     * List products with filters and pagination.
+     *
+     * Query string is validated by {@see IndexProductRequest}.
+     *
+     * @response array{success: true, message: string, data: array{data: ProductResource[], links: array<string, string|null>, meta: array<string, mixed>}}
+     */
     public function index(IndexProductRequest $request): JsonResponse
     {
         return $this->execute(function () use ($request): JsonResponse {
@@ -43,6 +50,11 @@ class ProductController extends BaseController
         });
     }
 
+    /**
+     * Create a product.
+     *
+     * @response array{success: true, message: string, data: ProductDetailResource} 201
+     */
     public function store(StoreProductRequest $request): JsonResponse
     {
         return $this->execute(function () use ($request): JsonResponse {
@@ -59,6 +71,13 @@ class ProductController extends BaseController
         });
     }
 
+    /**
+     * Get a single product with category, variants, discounts, and gallery media.
+     *
+     * @urlParam id integer required Product ID. Example: 1
+     *
+     * @response array{success: true, message: string, data: ProductDetailResource}
+     */
     public function show(int $id): JsonResponse
     {
         return $this->execute(function () use ($id): JsonResponse {
@@ -77,6 +96,13 @@ class ProductController extends BaseController
         });
     }
 
+    /**
+     * Update a product.
+     *
+     * @urlParam id integer required Product ID. Example: 1
+     *
+     * @response array{success: true, message: string, data: ProductDetailResource}
+     */
     public function update(UpdateProductRequest $request, int $id): JsonResponse
     {
         return $this->execute(function () use ($request, $id): JsonResponse {
@@ -98,6 +124,13 @@ class ProductController extends BaseController
         });
     }
 
+    /**
+     * Delete a product (soft delete).
+     *
+     * @urlParam id integer required Product ID. Example: 1
+     *
+     * @response array{success: true, message: string, data: null}
+     */
     public function destroy(int $id): JsonResponse
     {
         return $this->execute(function () use ($id): JsonResponse {
@@ -111,6 +144,13 @@ class ProductController extends BaseController
         });
     }
 
+    /**
+     * Update product status (active / inactive).
+     *
+     * @urlParam id integer required Product ID. Example: 1
+     *
+     * @response array{success: true, message: string, data: ProductDetailResource}
+     */
     public function updateStatus(UpdateProductStatusRequest $request, int $id): JsonResponse
     {
         return $this->execute(function () use ($request, $id): JsonResponse {

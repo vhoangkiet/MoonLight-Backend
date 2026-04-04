@@ -21,7 +21,7 @@ class UpdateProfileRequest extends FormRequest
             'last_name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'email', Rule::unique('users')->ignore($userId)],
             'phone' => ['nullable', 'string', 'max:20'],
-            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:2048'],
+            'avatar' => ['sometimes', 'image', 'mimes:jpeg,png,webp', 'max:2048'],
         ];
     }
 }

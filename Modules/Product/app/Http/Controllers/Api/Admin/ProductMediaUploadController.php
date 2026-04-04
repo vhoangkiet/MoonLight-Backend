@@ -15,6 +15,15 @@ class ProductMediaUploadController extends BaseController
 {
     public function __construct(protected ProductMediaService $productMediaService) {}
 
+    /**
+     * Upload a file to staging (returns a UUID to attach later via product `media_uuids`).
+     *
+     * Send as `multipart/form-data`. Validation is defined in {@see UploadProductMediaRequest}.
+     *
+     * @bodyParam file file required Binary upload. Allowed: JPEG, PNG, WebP, GIF, MP4, WebM, QuickTime. Max ~50MB (51200 KB).
+     *
+     * @response array{success: true, message: string, data: array{uuid: string, mime_type: string|null, url: string}} 201
+     */
     public function store(UploadProductMediaRequest $request): JsonResponse
     {
         return $this->execute(function () use ($request): JsonResponse {
