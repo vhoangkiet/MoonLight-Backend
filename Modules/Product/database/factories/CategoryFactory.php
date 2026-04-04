@@ -4,8 +4,8 @@ namespace Modules\Product\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Modules\Product\Enums\CategoryStatus;
-use Modules\Product\Models\Category;
+use Modules\Product\Catalog\Enums\CategoryStatus;
+use Modules\Product\Catalog\Models\Category;
 
 class CategoryFactory extends Factory
 {

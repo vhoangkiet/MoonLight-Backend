@@ -4,10 +4,10 @@ namespace Modules\Product\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\JsonResponse;
-use Modules\Product\Enums\CategoryStatus;
+use Modules\Product\Catalog\Enums\CategoryStatus;
+use Modules\Product\Catalog\Services\CategoryService;
 use Modules\Product\Http\Resources\CategoryDetailResource;
 use Modules\Product\Http\Resources\CategoryTreeResource;
-use Modules\Product\Services\CategoryService;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -3,16 +3,16 @@
 namespace Modules\Product\Providers;
 
 use Illuminate\Console\Scheduling\Schedule;
-use Modules\Product\Repositories\Eloquent\CategoryRepository;
-use Modules\Product\Repositories\Eloquent\DiscountRepository;
-use Modules\Product\Repositories\Eloquent\ProductRepository;
-use Modules\Product\Repositories\Eloquent\ProductVariantRepository;
-use Modules\Product\Repositories\Eloquent\VoucherRepository;
-use Modules\Product\Repositories\Interfaces\CategoryRepositoryInterface;
-use Modules\Product\Repositories\Interfaces\DiscountRepositoryInterface;
-use Modules\Product\Repositories\Interfaces\ProductRepositoryInterface;
-use Modules\Product\Repositories\Interfaces\ProductVariantRepositoryInterface;
-use Modules\Product\Repositories\Interfaces\VoucherRepositoryInterface;
+use Modules\Product\Catalog\Repositories\Eloquent\CategoryRepository;
+use Modules\Product\Catalog\Repositories\Eloquent\ProductRepository;
+use Modules\Product\Catalog\Repositories\Eloquent\ProductVariantRepository;
+use Modules\Product\Catalog\Repositories\Interfaces\CategoryRepositoryInterface;
+use Modules\Product\Catalog\Repositories\Interfaces\ProductRepositoryInterface;
+use Modules\Product\Catalog\Repositories\Interfaces\ProductVariantRepositoryInterface;
+use Modules\Product\Promotion\Repositories\Eloquent\DiscountRepository;
+use Modules\Product\Promotion\Repositories\Eloquent\VoucherRepository;
+use Modules\Product\Promotion\Repositories\Interfaces\DiscountRepositoryInterface;
+use Modules\Product\Promotion\Repositories\Interfaces\VoucherRepositoryInterface;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class ProductServiceProvider extends ModuleServiceProvider

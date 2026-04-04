@@ -4,10 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\Product\Enums\ProductStatus;
-use Modules\Product\Models\Category;
-use Modules\Product\Models\Product;
-use Modules\Product\Models\ProductVariant;
+use Modules\Product\Catalog\Enums\ProductStatus;
+use Modules\Product\Catalog\Models\Category;
+use Modules\Product\Catalog\Models\Product;
+use Modules\Product\Catalog\Models\ProductVariant;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -44,7 +44,7 @@ class ProductTest extends TestCase
                 'success',
                 'message',
                 'data' => [
-                    '*' => ['id', 'name', 'slug', 'status', 'category'],
+                    '*' => ['id', 'name', 'slug', 'status', 'category', 'media'],
                 ],
             ]);
     }

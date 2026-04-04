@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Product\Http\Controllers\Api\Admin\CategoryController as AdminCategoryController;
 use Modules\Product\Http\Controllers\Api\Admin\DiscountController as AdminDiscountController;
 use Modules\Product\Http\Controllers\Api\Admin\ProductController as AdminProductController;
+use Modules\Product\Http\Controllers\Api\Admin\ProductMediaUploadController as AdminProductMediaUploadController;
 use Modules\Product\Http\Controllers\Api\Admin\ProductVariantController as AdminProductVariantController;
 use Modules\Product\Http\Controllers\Api\Admin\VoucherController as AdminVoucherController;
 use Modules\Product\Http\Controllers\Api\Customer\CategoryController as CustomerCategoryController;
@@ -35,6 +36,10 @@ Route::middleware(['auth:api', 'role:admin|staff'])
             ->name('admin.categories.destroy');
         Route::patch('categories/{id}/status', [AdminCategoryController::class, 'updateStatus'])
             ->name('admin.categories.update-status');
+
+        // Product media (staging upload)
+        Route::post('product-media/upload', [AdminProductMediaUploadController::class, 'store'])
+            ->name('admin.product-media.upload');
 
         // Product Management
         Route::get('products', [AdminProductController::class, 'index'])

@@ -21,6 +21,11 @@ class ProductResource extends JsonResource
                 'slug' => $this->category->slug,
             ]),
             'variants_count' => $this->whenCounted('variants'),
+            'media' => $this->whenLoaded('media', function () {
+                $items = $this->media->where('collection_name', 'gallery')->sortBy('order_column')->values();
+
+                return ProductMediaResource::collection($items);
+            }),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];

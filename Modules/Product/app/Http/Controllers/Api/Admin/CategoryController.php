@@ -5,7 +5,8 @@ namespace Modules\Product\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Modules\Product\Enums\CategoryStatus;
+use Modules\Product\Catalog\Enums\CategoryStatus;
+use Modules\Product\Catalog\Services\CategoryService;
 use Modules\Product\Http\Requests\Admin\IndexCategoryRequest;
 use Modules\Product\Http\Requests\Admin\ReorderCategoriesRequest;
 use Modules\Product\Http\Requests\Admin\StoreCategoryRequest;
@@ -14,7 +15,6 @@ use Modules\Product\Http\Requests\Admin\UpdateCategoryStatusRequest;
 use Modules\Product\Http\Resources\CategoryDetailResource;
 use Modules\Product\Http\Resources\CategoryResource;
 use Modules\Product\Http\Resources\CategoryTreeResource;
-use Modules\Product\Services\CategoryService;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

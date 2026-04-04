@@ -3,12 +3,15 @@
 namespace Tests\Unit;
 
 use App\Exceptions\DomainException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\Product\Models\Category;
-use Modules\Product\Models\Product;
-use Modules\Product\Models\ProductVariant;
-use Modules\Product\Services\PricingService;
-use Modules\Product\Services\ProductVariantService;
+use Modules\Product\Catalog\Enums\VariantStatus;
+use Modules\Product\Catalog\Models\Product;
+use Modules\Product\Catalog\Models\ProductVariant;
+use Modules\Product\Catalog\Services\PricingService;
+use Modules\Product\Catalog\Services\ProductVariantService;
+use Modules\Product\Promotion\Models\Discount;
+use Modules\Product\Promotion\Models\Voucher;
 use Tests\TestCase;
 
 class ProductServiceTest extends TestCase
@@ -16,6 +19,7 @@ class ProductServiceTest extends TestCase
     use RefreshDatabase;
 
     private PricingService $pricingService;
+
     private ProductVariantService $variantService;
 
     protected function setUp(): void
@@ -59,7 +63,7 @@ class ProductServiceTest extends TestCase
             'tonal_palette' => 'Warm',
             'size' => 'Medium',
         ]);
-        $discount = \Modules\Product\Models\Discount::factory()->create([
+        $discount = Discount::factory()->create([
             'type' => 'fixed',
             'value' => 20,
             'is_active' => true,
@@ -87,7 +91,7 @@ class ProductServiceTest extends TestCase
             'tonal_palette' => 'Warm',
             'size' => 'Medium',
         ]);
-        $discount = \Modules\Product\Models\Discount::factory()->create([
+        $discount = Discount::factory()->create([
             'type' => 'percentage',
             'value' => 20,
             'is_active' => true,
@@ -116,14 +120,14 @@ class ProductServiceTest extends TestCase
             'size' => 'Medium',
         ]);
 
-        $discount1 = \Modules\Product\Models\Discount::factory()->create([
+        $discount1 = Discount::factory()->create([
             'type' => 'percentage',
             'value' => 10,
             'is_active' => true,
             'start_date' => now()->subDay(),
             'end_date' => now()->addDays(7),
         ]);
-        $discount2 = \Modules\Product\Models\Discount::factory()->create([
+        $discount2 = Discount::factory()->create([
             'type' => 'fixed',
             'value' => 5,
             'is_active' => true,
@@ -152,7 +156,7 @@ class ProductServiceTest extends TestCase
             'tonal_palette' => 'Warm',
             'size' => 'Medium',
         ]);
-        $voucher = \Modules\Product\Models\Voucher::factory()->create([
+        $voucher = Voucher::factory()->create([
             'code' => 'TEST20',
             'type' => 'percentage',
             'value' => 20,
@@ -227,7 +231,7 @@ class ProductServiceTest extends TestCase
         ]);
 
         // Apply discount only to variant1
-        $discount = \Modules\Product\Models\Discount::factory()->create([
+        $discount = Discount::factory()->create([
             'type' => 'percentage',
             'value' => 50,
             'is_active' => true,
@@ -322,7 +326,7 @@ class ProductServiceTest extends TestCase
     {
         // Service tries to create variant for non-existent product
         // This will throw QueryException due to foreign key constraint
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
 
         $this->variantService->createVariant(99999, [
             'price' => 100,
@@ -359,14 +363,14 @@ class ProductServiceTest extends TestCase
         $product = Product::factory()->create();
         $variant = ProductVariant::factory()->create([
             'product_id' => $product->id,
-            'status' => \Modules\Product\Enums\VariantStatus::ACTIVE,
+            'status' => VariantStatus::ACTIVE,
             'shape' => 'Round',
             'length' => '50cm',
             'tonal_palette' => 'Warm',
             'size' => 'Medium',
         ]);
 
-        $this->variantService->updateStatus($variant->id, \Modules\Product\Enums\VariantStatus::INACTIVE);
+        $this->variantService->updateStatus($variant->id, VariantStatus::INACTIVE);
 
         $this->assertDatabaseHas('product_variants', [
             'id' => $variant->id,

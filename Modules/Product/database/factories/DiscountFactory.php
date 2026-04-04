@@ -4,7 +4,7 @@ namespace Modules\Product\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Modules\Product\Models\Discount;
+use Modules\Product\Promotion\Models\Discount;
 
 class DiscountFactory extends Factory
 {
@@ -13,8 +13,8 @@ class DiscountFactory extends Factory
     public function definition(): array
     {
         $type = $this->faker->randomElement(['percentage', 'fixed']);
-        $value = $type === 'percentage' 
-            ? $this->faker->numberBetween(5, 50) 
+        $value = $type === 'percentage'
+            ? $this->faker->numberBetween(5, 50)
             : $this->faker->randomFloat(2, 5, 100);
 
         return [

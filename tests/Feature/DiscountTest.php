@@ -4,10 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
-use Modules\Product\Models\Discount;
-use Modules\Product\Models\Product;
-use Modules\Product\Models\ProductVariant;
+use Modules\Product\Catalog\Models\Product;
+use Modules\Product\Catalog\Models\ProductVariant;
+use Modules\Product\Promotion\Models\Discount;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 

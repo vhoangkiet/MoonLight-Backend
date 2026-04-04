@@ -4,7 +4,7 @@ namespace Modules\Product\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Modules\Product\Models\Voucher;
+use Modules\Product\Promotion\Models\Voucher;
 
 class VoucherFactory extends Factory
 {
@@ -13,8 +13,8 @@ class VoucherFactory extends Factory
     public function definition(): array
     {
         $type = $this->faker->randomElement(['percentage', 'fixed']);
-        $value = $type === 'percentage' 
-            ? $this->faker->numberBetween(5, 50) 
+        $value = $type === 'percentage'
+            ? $this->faker->numberBetween(5, 50)
             : $this->faker->randomFloat(2, 5, 100);
 
         return [

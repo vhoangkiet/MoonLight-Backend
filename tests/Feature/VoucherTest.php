@@ -4,9 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
-use Modules\Product\Models\Voucher;
-use Modules\Product\Models\VoucherUse;
+use Modules\Product\Promotion\Models\Voucher;
+use Modules\Product\Promotion\Models\VoucherUse;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -37,10 +36,6 @@ class VoucherTest extends TestCase
 
         $response = $this->actingAs($this->admin, 'api')
             ->getJson('/api/v1/admin/vouchers');
-
-        // Debug: dump actual response
-        dump('Status: ' . $response->status());
-        dump($response->json());
 
         $response->assertStatus(200)
             ->assertJsonStructure([

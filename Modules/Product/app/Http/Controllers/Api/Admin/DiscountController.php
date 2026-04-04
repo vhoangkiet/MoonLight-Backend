@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Modules\Product\Http\Requests\Admin\StoreDiscountRequest;
 use Modules\Product\Http\Requests\Admin\UpdateDiscountRequest;
 use Modules\Product\Http\Resources\DiscountResource;
-use Modules\Product\Services\DiscountService;
+use Modules\Product\Promotion\Services\DiscountService;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Modules\Product\Http\Requests\Admin\StoreVoucherRequest;
 use Modules\Product\Http\Requests\Admin\UpdateVoucherRequest;
 use Modules\Product\Http\Resources\VoucherResource;
-use Modules\Product\Services\VoucherService;
+use Modules\Product\Promotion\Services\VoucherService;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

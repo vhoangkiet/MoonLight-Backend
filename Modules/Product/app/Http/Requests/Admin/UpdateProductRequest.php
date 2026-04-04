@@ -4,7 +4,7 @@ namespace Modules\Product\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Modules\Product\Enums\ProductStatus;
+use Modules\Product\Catalog\Enums\ProductStatus;
 
 class UpdateProductRequest extends FormRequest
 {
@@ -13,6 +13,9 @@ class UpdateProductRequest extends FormRequest
         return true;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function rules(): array
     {
         $productId = $this->route('id');
@@ -23,6 +26,8 @@ class UpdateProductRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'status' => ['nullable', 'string', Rule::enum(ProductStatus::class)],
+            'media_uuids' => ['sometimes', 'array'],
+            'media_uuids.*' => ['required', 'uuid', 'distinct'],
         ];
     }
 }

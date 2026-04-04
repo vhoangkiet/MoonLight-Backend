@@ -4,12 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Modules\Product\Enums\ProductStatus;
-use Modules\Product\Models\Category;
-use Modules\Product\Models\Discount;
-use Modules\Product\Models\Product;
-use Modules\Product\Models\ProductVariant;
-use Modules\Product\Models\Voucher;
+use Modules\Product\Catalog\Enums\ProductStatus;
+use Modules\Product\Catalog\Models\Category;
+use Modules\Product\Catalog\Models\Product;
+use Modules\Product\Catalog\Models\ProductVariant;
+use Modules\Product\Promotion\Models\Discount;
+use Modules\Product\Promotion\Models\Voucher;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -118,6 +118,7 @@ class CustomerProductTest extends TestCase
                     'id',
                     'name',
                     'slug',
+                    'media',
                     'variants' => [
                         '*' => ['id', 'sku', 'price'],
                     ],

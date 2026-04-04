@@ -25,6 +25,7 @@ Role (Vai trò)          Permission (Quyền hạn)
 **Mô tả**: Người dùng có toàn quyền quản trị hệ thống
 
 **Quyền hạn**:
+
 ```php
 [
     // User Management
@@ -74,6 +75,7 @@ Role (Vai trò)          Permission (Quyền hạn)
 ```
 
 **Chức năng chính**:
+
 - Quản lý toàn bộ người dùng và phân quyền
 - CRUD tất cả sản phẩm, danh mục
 - Quản lý giảm giá và voucher
@@ -86,6 +88,7 @@ Role (Vai trò)          Permission (Quyền hạn)
 **Mô tả**: Nhân viên vận hành, quản lý nội dung và đơn hàng
 
 **Quyền hạn**:
+
 ```php
 [
     // Product Management (Limited)
@@ -118,6 +121,7 @@ Role (Vai trò)          Permission (Quyền hạn)
 ```
 
 **Chức năng chính**:
+
 - Quản lý sản phẩm (thêm, sửa, cập nhật kho)
 - Không thể xóa sản phẩm đã tạo
 - Quản lý discount/voucher (thêm, sửa)
@@ -129,6 +133,7 @@ Role (Vai trò)          Permission (Quyền hạn)
 **Mô tả**: Người dùng cuối, khách hàng mua sắm
 
 **Quyền hạn**:
+
 ```php
 [
     // Public Product Access
@@ -147,6 +152,7 @@ Role (Vai trò)          Permission (Quyền hạn)
 ```
 
 **Chức năng chính**:
+
 - Xem sản phẩm công khai
 - Tính toán giá với discount/voucher
 - Quản lý thông tin cá nhân
@@ -156,62 +162,74 @@ Role (Vai trò)          Permission (Quyền hạn)
 
 ### Product Permissions
 
-| Permission | Mô tả | Admin | Staff | Customer |
-|------------|-------|-------|-------|----------|
-| `products.view` | Xem danh sách sản phẩm | ✅ | ✅ | ❌ |
-| `products.public_view` | Xem sản phẩm công khai | ✅ | ✅ | ✅ |
-| `products.create` | Tạo sản phẩm mới | ✅ | ✅ | ❌ |
-| `products.update` | Cập nhật sản phẩm | ✅ | ✅ | ❌ |
-| `products.delete` | Xóa sản phẩm | ✅ | ❌ | ❌ |
-| `products.archive` | Lưu trữ sản phẩm | ✅ | ✅ | ❌ |
-| `products.manage_variants` | Quản lý biến thể | ✅ | ✅ | ❌ |
-| `products.manage_stock` | Quản lý tồn kho | ✅ | ✅ | ❌ |
+
+| Permission                 | Mô tả                  | Admin | Staff | Customer |
+| -------------------------- | ---------------------- | ----- | ----- | -------- |
+| `products.view`            | Xem danh sách sản phẩm | ✅     | ✅     | ❌        |
+| `products.public_view`     | Xem sản phẩm công khai | ✅     | ✅     | ✅        |
+| `products.create`          | Tạo sản phẩm mới       | ✅     | ✅     | ❌        |
+| `products.update`          | Cập nhật sản phẩm      | ✅     | ✅     | ❌        |
+| `products.delete`          | Xóa sản phẩm           | ✅     | ❌     | ❌        |
+| `products.archive`         | Lưu trữ sản phẩm       | ✅     | ✅     | ❌        |
+| `products.manage_variants` | Quản lý biến thể       | ✅     | ✅     | ❌        |
+| `products.manage_stock`    | Quản lý tồn kho        | ✅     | ✅     | ❌        |
+
 
 ### Category Permissions
 
-| Permission | Mô tả | Admin | Staff | Customer |
-|------------|-------|-------|-------|----------|
-| `categories.view` | Xem danh mục | ✅ | ✅ | ✅ |
-| `categories.create` | Tạo danh mục | ✅ | ❌ | ❌ |
-| `categories.update` | Cập nhật danh mục | ✅ | ❌ | ❌ |
-| `categories.delete` | Xóa danh mục | ✅ | ❌ | ❌ |
+
+| Permission          | Mô tả             | Admin | Staff | Customer |
+| ------------------- | ----------------- | ----- | ----- | -------- |
+| `categories.view`   | Xem danh mục      | ✅     | ✅     | ✅        |
+| `categories.create` | Tạo danh mục      | ✅     | ❌     | ❌        |
+| `categories.update` | Cập nhật danh mục | ✅     | ❌     | ❌        |
+| `categories.delete` | Xóa danh mục      | ✅     | ❌     | ❌        |
+
 
 ### Discount Permissions
 
-| Permission | Mô tả | Admin | Staff | Customer |
-|------------|-------|-------|-------|----------|
-| `discounts.view` | Xem giảm giá | ✅ | ✅ | ❌ |
-| `discounts.create` | Tạo giảm giá | ✅ | ✅ | ❌ |
-| `discounts.update` | Cập nhật giảm giá | ✅ | ✅ | ❌ |
-| `discounts.delete` | Xóa giảm giá | ✅ | ❌ | ❌ |
-| `discounts.activate` | Kích hoạt/tắt giảm giá | ✅ | ✅ | ❌ |
+
+| Permission           | Mô tả                  | Admin | Staff | Customer |
+| -------------------- | ---------------------- | ----- | ----- | -------- |
+| `discounts.view`     | Xem giảm giá           | ✅     | ✅     | ❌        |
+| `discounts.create`   | Tạo giảm giá           | ✅     | ✅     | ❌        |
+| `discounts.update`   | Cập nhật giảm giá      | ✅     | ✅     | ❌        |
+| `discounts.delete`   | Xóa giảm giá           | ✅     | ❌     | ❌        |
+| `discounts.activate` | Kích hoạt/tắt giảm giá | ✅     | ✅     | ❌        |
+
 
 ### Voucher Permissions
 
-| Permission | Mô tả | Admin | Staff | Customer |
-|------------|-------|-------|-------|----------|
-| `vouchers.view` | Xem voucher | ✅ | ✅ | ❌ |
-| `vouchers.create` | Tạo voucher | ✅ | ✅ | ❌ |
-| `vouchers.update` | Cập nhật voucher | ✅ | ✅ | ❌ |
-| `vouchers.delete` | Xóa voucher | ✅ | ❌ | ❌ |
-| `vouchers.activate` | Kích hoạt/tắt voucher | ✅ | ✅ | ❌ |
+
+| Permission          | Mô tả                 | Admin | Staff | Customer |
+| ------------------- | --------------------- | ----- | ----- | -------- |
+| `vouchers.view`     | Xem voucher           | ✅     | ✅     | ❌        |
+| `vouchers.create`   | Tạo voucher           | ✅     | ✅     | ❌        |
+| `vouchers.update`   | Cập nhật voucher      | ✅     | ✅     | ❌        |
+| `vouchers.delete`   | Xóa voucher           | ✅     | ❌     | ❌        |
+| `vouchers.activate` | Kích hoạt/tắt voucher | ✅     | ✅     | ❌        |
+
 
 ### User Management Permissions
 
-| Permission | Mô tả | Admin | Staff | Customer |
-|------------|-------|-------|-------|----------|
-| `users.view` | Xem users | ✅ | ❌ | ❌ |
-| `users.create` | Tạo user | ✅ | ❌ | ❌ |
-| `users.update` | Cập nhật user | ✅ | ❌ | ❌ |
-| `users.delete` | Xóa user | ✅ | ❌ | ❌ |
-| `users.manage_roles` | Phân quyền | ✅ | ❌ | ❌ |
+
+| Permission           | Mô tả         | Admin | Staff | Customer |
+| -------------------- | ------------- | ----- | ----- | -------- |
+| `users.view`         | Xem users     | ✅     | ❌     | ❌        |
+| `users.create`       | Tạo user      | ✅     | ❌     | ❌        |
+| `users.update`       | Cập nhật user | ✅     | ❌     | ❌        |
+| `users.delete`       | Xóa user      | ✅     | ❌     | ❌        |
+| `users.manage_roles` | Phân quyền    | ✅     | ❌     | ❌        |
+
 
 ### Report Permissions
 
-| Permission | Mô tả | Admin | Staff | Customer |
-|------------|-------|-------|-------|----------|
-| `reports.view` | Xem báo cáo | ✅ | ✅ | ❌ |
-| `reports.export` | Export báo cáo | ✅ | ❌ | ❌ |
+
+| Permission       | Mô tả          | Admin | Staff | Customer |
+| ---------------- | -------------- | ----- | ----- | -------- |
+| `reports.view`   | Xem báo cáo    | ✅     | ✅     | ❌        |
+| `reports.export` | Export báo cáo | ✅     | ❌     | ❌        |
+
 
 ## Middleware & Authorization
 
@@ -256,8 +274,8 @@ namespace Modules\Product\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\JsonResponse;
+use Modules\Product\Catalog\Models\Product;
 use Modules\Product\Http\Requests\Admin\StoreProductRequest;
-use Modules\Product\Models\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends BaseController
@@ -298,7 +316,7 @@ class ProductController extends BaseController
 namespace Modules\Product\Policies;
 
 use App\Models\User;
-use Modules\Product\Models\Product;
+use Modules\Product\Catalog\Models\Product;
 
 class ProductPolicy
 {
@@ -642,6 +660,7 @@ public function destroy(int $id): JsonResponse
 ## Troubleshooting
 
 ### Permission not working
+
 ```bash
 # Clear permission cache
 php artisan permission:cache-reset
@@ -651,6 +670,7 @@ app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 ```
 
 ### Role assignment not working
+
 ```bash
 # Check user has role
 php artisan tinker
@@ -665,3 +685,4 @@ php artisan tinker
 - [Spatie Laravel Permission](https://spatie.be/docs/laravel-permission/v6/introduction)
 - [Laravel Authorization](https://laravel.com/docs/12.x/authorization)
 - [Laravel Policies](https://laravel.com/docs/12.x/authorization#creating-policies)
+

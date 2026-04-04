@@ -5,8 +5,8 @@ namespace Modules\Product\Http\Requests\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
-use Modules\Product\Enums\CategoryStatus;
-use Modules\Product\Models\Category;
+use Modules\Product\Catalog\Enums\CategoryStatus;
+use Modules\Product\Catalog\Models\Category;
 
 class UpdateCategoryRequest extends FormRequest
 {

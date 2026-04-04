@@ -22,6 +22,11 @@ class ProductDetailResource extends JsonResource
             ]),
             'variants' => ProductVariantResource::collection($this->whenLoaded('variants')),
             'discounts' => DiscountResource::collection($this->whenLoaded('discounts')),
+            'media' => $this->whenLoaded('media', function () {
+                $items = $this->media->where('collection_name', 'gallery')->sortBy('order_column')->values();
+
+                return ProductMediaResource::collection($items);
+            }),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];

@@ -5,11 +5,11 @@ namespace Modules\Product\Http\Controllers\Api\Admin;
 use App\Exceptions\DomainException;
 use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\JsonResponse;
-use Modules\Product\Enums\VariantStatus;
+use Modules\Product\Catalog\Enums\VariantStatus;
+use Modules\Product\Catalog\Services\ProductVariantService;
 use Modules\Product\Http\Requests\Admin\StoreProductVariantRequest;
 use Modules\Product\Http\Requests\Admin\UpdateProductVariantRequest;
 use Modules\Product\Http\Resources\ProductVariantResource;
-use Modules\Product\Services\ProductVariantService;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

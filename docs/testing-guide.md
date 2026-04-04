@@ -23,6 +23,7 @@ tests/
 ## Configuration
 
 ### phpunit.xml
+
 ```xml
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
@@ -73,6 +74,7 @@ abstract class TestCase extends BaseTestCase
 ```
 
 Tất cả test classes kế thừa từ `TestCase` đều có:
+
 - **RefreshDatabase**: Database được refresh trước mỗi test
 - **SQLite in-memory**: Fast testing database
 - **Testing environment**: Isolated from production
@@ -80,11 +82,13 @@ Tất cả test classes kế thừa từ `TestCase` đều có:
 ## Running Tests
 
 ### Run All Tests
+
 ```bash
 php artisan test --compact
 ```
 
 ### Run Specific Test Suite
+
 ```bash
 # Unit tests only
 php artisan test --testsuite=Unit
@@ -94,6 +98,7 @@ php artisan test --testsuite=Feature
 ```
 
 ### Run Specific Test File
+
 ```bash
 php artisan test --filter=ProductTest
 php artisan test --filter=ProductVariantTest
@@ -103,16 +108,19 @@ php artisan test --filter=ProductServiceTest
 ```
 
 ### Run Specific Test Method
+
 ```bash
 php artisan test --filter=test_can_create_product
 ```
 
 ### Run With Coverage
+
 ```bash
 php artisan test --coverage
 ```
 
 ### Run and Stop on First Failure
+
 ```bash
 php artisan test --stop-on-failure
 ```
@@ -120,6 +128,7 @@ php artisan test --stop-on-failure
 ## Feature Tests
 
 ### Pattern
+
 Feature tests kiểm tra API endpoints từ đầu đến cuối:
 
 ```php
@@ -129,8 +138,8 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
-use Modules\Product\Models\Product;
-use Modules\Product\Models\Category;
+use Modules\Product\Catalog\Models\Category;
+use Modules\Product\Catalog\Models\Product;
 
 class ProductTest extends TestCase
 {
@@ -190,6 +199,7 @@ class ProductTest extends TestCase
 ### Common Assertions
 
 #### Status Codes
+
 ```php
 $response->assertStatus(200);        // OK
 $response->assertStatus(201);        // Created
@@ -203,6 +213,7 @@ $response->assertStatus(500);        // Server Error
 ```
 
 #### JSON Structure
+
 ```php
 $response->assertJson([
     'success' => true,
@@ -227,6 +238,7 @@ $response->assertJsonStructure([
 ```
 
 #### Validation Errors
+
 ```php
 $response->assertJsonValidationErrors('name');
 $response->assertJsonValidationErrors(['name', 'email']);
@@ -234,6 +246,7 @@ $response->assertJsonMissingValidationErrors('description');
 ```
 
 #### Database Assertions
+
 ```php
 $this->assertDatabaseHas('products', [
     'name' => 'Test Product',
@@ -254,6 +267,7 @@ $this->assertSoftDeleted('products', [
 ## Unit Tests
 
 ### Pattern
+
 Unit tests kiểm tra business logic riêng lẻ:
 
 ```php
@@ -262,10 +276,10 @@ Unit tests kiểm tra business logic riêng lẻ:
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Modules\Product\Services\PricingService;
-use Modules\Product\Models\Product;
-use Modules\Product\Models\ProductVariant;
-use Modules\Product\Models\Discount;
+use Modules\Product\Catalog\Models\Product;
+use Modules\Product\Catalog\Models\ProductVariant;
+use Modules\Product\Catalog\Services\PricingService;
+use Modules\Product\Promotion\Models\Discount;
 
 class ProductServiceTest extends TestCase
 {
@@ -473,6 +487,7 @@ public function test_api_with_token(): void
 ## Testing Best Practices
 
 ### 1. Test Naming
+
 ```php
 // Good
 public function test_can_create_product_with_valid_data(): void
@@ -486,6 +501,7 @@ public function test1(): void
 ```
 
 ### 2. Arrange-Act-Assert Pattern
+
 ```php
 public function test_can_update_product(): void
 {
@@ -509,6 +525,7 @@ public function test_can_update_product(): void
 ```
 
 ### 3. One Concept Per Test
+
 ```php
 // Good - Test one thing
 public function test_validation_fails_without_name(): void
@@ -533,6 +550,7 @@ public function test_validation(): void
 ```
 
 ### 4. Use Factories, Not Fixtures
+
 ```php
 // Good - Dynamic data
 $product = Product::factory()->create();
@@ -545,12 +563,14 @@ $this->postJson('/api/admin/products', [
 ```
 
 ### 5. Clean Up After Tests
+
 ```php
 // Already handled by RefreshDatabase trait
 // No manual cleanup needed
 ```
 
 ### 6. Test Edge Cases
+
 ```php
 public function test_can_handle_empty_search_results(): void
 {
@@ -577,23 +597,27 @@ public function test_handles_very_long_product_name(): void
 ## Debugging Tests
 
 ### Dump Response
+
 ```php
 $response = $this->getJson('/api/admin/products');
 dd($response->json());  // or dump($response->json())
 ```
 
 ### Dump Database
+
 ```php
 $this->postJson('/api/admin/products', $data);
 db::table('products')->dump();
 ```
 
 ### Stop on Failure
+
 ```bash
 php artisan test --stop-on-failure
 ```
 
 ### Verbose Output
+
 ```bash
 php artisan test --verbose
 ```
@@ -601,6 +625,7 @@ php artisan test --verbose
 ## Continuous Integration
 
 ### GitHub Actions Example
+
 ```yaml
 name: Tests
 
@@ -633,18 +658,21 @@ jobs:
 ### Common Issues
 
 #### 1. Database Locked (SQLite)
+
 ```bash
 # Solution: Use in-memory database
 DB_DATABASE=":memory:"
 ```
 
 #### 2. Foreign Key Constraints
+
 ```php
 // Ensure factories create related data
 $product = Product::factory()->create();  // Creates category automatically
 ```
 
 #### 3. Time-based Tests
+
 ```php
 // Use Carbon for time manipulation
 use Illuminate\Support\Carbon;
@@ -655,6 +683,7 @@ Carbon::setTestNow();
 ```
 
 #### 4. Async Jobs
+
 ```php
 // Use Queue fake for testing jobs
 use Illuminate\Support\Facades\Queue;
@@ -665,3 +694,4 @@ Queue::fake();
 
 Queue::assertPushed(ProcessPodcast::class);
 ```
+

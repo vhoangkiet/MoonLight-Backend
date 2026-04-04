@@ -4,7 +4,7 @@ namespace Modules\Product\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Modules\Product\Enums\VariantStatus;
+use Modules\Product\Catalog\Enums\VariantStatus;
 
 class UpdateProductVariantRequest extends FormRequest
 {

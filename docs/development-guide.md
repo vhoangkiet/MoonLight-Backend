@@ -3,6 +3,7 @@
 ## Getting Started
 
 ### Prerequisites
+
 - PHP 8.3+
 - Composer 2.x
 - Node.js 18+ (cho asset compilation)
@@ -12,23 +13,27 @@
 ### Environment Setup
 
 #### 1. Clone Repository
+
 ```bash
 git clone https://github.com/vhoangkiet/MoonLight-Backend.git
 cd MoonLight-Backend
 ```
 
 #### 2. Install PHP Dependencies
+
 ```bash
 composer install
 ```
 
 #### 3. Environment Configuration
+
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
 Cấu hình `.env`:
+
 ```env
 APP_NAME="MoonLight Backend"
 APP_ENV=local
@@ -59,6 +64,7 @@ PASSPORT_PASSWORD_CLIENT_SECRET=your-client-secret
 ```
 
 #### 4. Database Setup
+
 ```bash
 # Tạo database
 touch database/database.sqlite  # Nếu dùng SQLite
@@ -74,12 +80,14 @@ php artisan migrate:fresh --seed
 ```
 
 #### 5. Passport Setup
+
 ```bash
 php artisan passport:install
 php artisan passport:keys
 ```
 
 #### 6. Storage Link
+
 ```bash
 php artisan storage:link
 ```
@@ -143,6 +151,32 @@ Modules/{Module}/
 ├── routes/                  # Module routes
 └── module.json             # Module metadata
 ```
+
+### Module Product — cấu trúc domain
+
+Module **Product** gom domain trong `Modules/Product/app/` theo ba vùng (vẫn là **một** module Laravel; autoload `Modules\Product\` → `app/`). HTTP (`Http/`), Providers và factories trong `database/factories/` giữ namespace `Modules\Product\Http\...`, `Modules\Product\Providers\...`, `Modules\Product\Database\Factories\...`.
+
+```
+Modules/Product/app/
+├── Catalog/                 # Sản phẩm, danh mục, biến thể, giá
+│   ├── Enums/               # ProductStatus, VariantStatus, CategoryStatus
+│   ├── Models/              # Product, Category, ProductVariant
+│   ├── Services/            # ProductService, CategoryService, …
+│   └── Repositories/
+│       ├── Interfaces/
+│       └── Eloquent/
+├── Promotion/               # Giảm giá, voucher
+│   ├── Models/              # Discount, Voucher, VoucherUse
+│   ├── Services/
+│   └── Repositories/
+├── Media/                   # Upload staging + đồng bộ gallery Spatie
+│   ├── Models/              # ProductMediaStaging
+│   └── Services/            # ProductMediaService
+├── Http/
+└── Providers/
+```
+
+**Namespace:** `Modules\Product\Catalog\...`, `Modules\Product\Promotion\...`, `Modules\Product\Media\...`. Ví dụ model sản phẩm: `Modules\Product\Catalog\Models\Product`.
 
 ## Development Workflow
 
@@ -212,20 +246,23 @@ vendor/bin/pint app/Models/User.php
 
 ### Naming Conventions
 
-| Type | Convention | Example |
-|------|------------|---------|
-| Class | PascalCase | `ProductController` |
-| Method | camelCase | `calculatePrice()` |
-| Variable | camelCase | `$productVariant` |
-| Constant | UPPER_CASE | `MAX_PRODUCT_LIMIT` |
-| Database Table | snake_case, plural | `product_variants` |
-| Model | PascalCase, singular | `ProductVariant` |
-| Trait | PascalCase | `HasDiscounts` |
-| Interface | PascalCase | `ProductRepositoryInterface` |
+
+| Type           | Convention           | Example                      |
+| -------------- | -------------------- | ---------------------------- |
+| Class          | PascalCase           | `ProductController`          |
+| Method         | camelCase            | `calculatePrice()`           |
+| Variable       | camelCase            | `$productVariant`            |
+| Constant       | UPPER_CASE           | `MAX_PRODUCT_LIMIT`          |
+| Database Table | snake_case, plural   | `product_variants`           |
+| Model          | PascalCase, singular | `ProductVariant`             |
+| Trait          | PascalCase           | `HasDiscounts`               |
+| Interface      | PascalCase           | `ProductRepositoryInterface` |
+
 
 ### Code Structure
 
 #### Controllers
+
 ```php
 <?php
 
@@ -233,9 +270,9 @@ namespace Modules\Product\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\JsonResponse;
+use Modules\Product\Catalog\Services\ProductService;
 use Modules\Product\Http\Requests\Admin\StoreProductRequest;
 use Modules\Product\Http\Requests\Admin\UpdateProductRequest;
-use Modules\Product\Services\ProductService;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends BaseController
@@ -317,14 +354,15 @@ class ProductController extends BaseController
 ```
 
 #### Services
+
 ```php
 <?php
 
-namespace Modules\Product\Services;
+namespace Modules\Product\Catalog\Services;
 
 use App\Exceptions\DomainException;
-use Modules\Product\Models\Product;
-use Modules\Product\Repositories\Contracts\ProductRepositoryInterface;
+use Modules\Product\Catalog\Models\Product;
+use Modules\Product\Catalog\Repositories\Interfaces\ProductRepositoryInterface;
 
 class ProductService
 {
@@ -367,15 +405,17 @@ class ProductService
 ```
 
 #### Repositories
+
 ```php
 <?php
 
-namespace Modules\Product\Repositories\Contracts;
+namespace Modules\Product\Catalog\Repositories\Interfaces;
 
+use App\Repositories\Interfaces\BaseRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Modules\Product\Models\Product;
+use Modules\Product\Catalog\Models\Product;
 
-interface ProductRepositoryInterface
+interface ProductRepositoryInterface extends BaseRepositoryInterface
 {
     public function getFiltered(array $filters, ?int $perPage = 15): LengthAwarePaginator;
     
@@ -394,16 +434,17 @@ interface ProductRepositoryInterface
 ```php
 <?php
 
-namespace Modules\Product\Repositories\Eloquent;
+namespace Modules\Product\Catalog\Repositories\Eloquent;
 
-use Modules\Product\Models\Product;
-use Modules\Product\Repositories\Contracts\ProductRepositoryInterface;
+use App\Repositories\Eloquent\BaseRepository;
+use Modules\Product\Catalog\Models\Product;
+use Modules\Product\Catalog\Repositories\Interfaces\ProductRepositoryInterface;
 
-class ProductRepository implements ProductRepositoryInterface
+class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
-    public function __construct(
-        private readonly Product $model
-    ) {
+    public function __construct(Product $model)
+    {
+        parent::__construct($model);
     }
 
     public function getFiltered(array $filters, ?int $perPage = 15): LengthAwarePaginator
@@ -468,6 +509,7 @@ class ProductRepository implements ProductRepositoryInterface
 namespace Modules\Product\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\Product\Catalog\Models\Product;
 
 class StoreProductRequest extends FormRequest
 {
@@ -661,7 +703,7 @@ return new class extends Migration
 namespace Modules\Product\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Product\Models\Product;
+use Modules\Product\Catalog\Models\Product;
 
 class ProductFactory extends Factory
 {
@@ -764,12 +806,14 @@ How to test these changes
 ## Debugging
 
 ### Laravel Telescope
+
 ```bash
 # Access Telescope
 curl http://localhost:8000/telescope
 ```
 
 ### Laravel Pail
+
 ```bash
 # Real-time log monitoring
 php artisan pail
@@ -779,19 +823,23 @@ php artisan pail --filter=error
 ```
 
 ### Tinker
+
 ```bash
 php artisan tinker
 
 # Test code
->>> $product = \Modules\Product\Models\Product::first();
+>>> $product = \Modules\Product\Catalog\Models\Product::first();
 >>> $product->variants;
 ```
 
 ## Performance Optimization
 
 ### Caching
+
 ```php
 // Cache query results
+use Modules\Product\Catalog\Models\Product;
+
 $products = Cache::remember('products.active', 3600, function () {
     return Product::where('status', 'active')->get();
 });
@@ -802,7 +850,10 @@ REDIS_HOST=127.0.0.1
 ```
 
 ### Eager Loading
+
 ```php
+use Modules\Product\Catalog\Models\Product;
+
 // Good - Eager load relationships
 $products = Product::with(['category', 'variants', 'discounts'])->get();
 
@@ -814,7 +865,10 @@ foreach ($products as $product) {
 ```
 
 ### Query Optimization
+
 ```php
+use Modules\Product\Catalog\Models\Product;
+
 // Good - Select specific columns
 Product::select('id', 'name', 'slug')->get();
 
@@ -827,16 +881,19 @@ Product::where('status', 'active')
 ## Security
 
 ### Input Validation
+
 - Validate tất cả inputs qua Form Requests
 - Sử dụng Laravel Validation rules
 - Custom validation messages
 
 ### Authorization
+
 - Sử dụng Policies cho authorization
 - Check permissions trong controllers
 - Route middleware cho roles
 
 ### SQL Injection Prevention
+
 - Sử dụng Eloquent ORM (prepared statements)
 - Không dùng raw queries với user input
 - Validate tất cả parameters
@@ -844,6 +901,7 @@ Product::where('status', 'active')
 ## Environment Variables
 
 ### Required
+
 ```env
 APP_KEY=
 DB_CONNECTION=
@@ -856,6 +914,7 @@ PASSPORT_PASSWORD_CLIENT_SECRET=
 ```
 
 ### Optional
+
 ```env
 REDIS_HOST=
 MAIL_MAILER=
@@ -869,22 +928,26 @@ S3_BUCKET=
 ### Common Issues
 
 #### 1. Class Not Found
+
 ```bash
 composer dump-autoload
 ```
 
 #### 2. Route Not Found
+
 ```bash
 php artisan route:clear
 php artisan route:cache
 ```
 
 #### 3. Config Not Updated
+
 ```bash
 php artisan config:clear
 ```
 
 #### 4. Migration Failed
+
 ```bash
 # Fresh database
 php artisan migrate:fresh --seed
@@ -894,6 +957,7 @@ php artisan migrate --path=database/migrations/2024_01_01_000001_create_products
 ```
 
 #### 5. Permission Denied (Storage)
+
 ```bash
 chmod -R 775 storage
 chmod -R 775 bootstrap/cache
@@ -939,3 +1003,4 @@ php artisan tinker --execute="dd(User::first())"
 - [Laravel Validation](https://laravel.com/docs/12.x/validation)
 - [Laravel Testing](https://laravel.com/docs/12.x/testing)
 - [PHP PSR-12](https://www.php-fig.org/psr/psr-12/)
+

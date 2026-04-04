@@ -3,9 +3,9 @@
 namespace Modules\Product\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Product\Enums\VariantStatus;
-use Modules\Product\Models\Product;
-use Modules\Product\Models\ProductVariant;
+use Modules\Product\Catalog\Enums\VariantStatus;
+use Modules\Product\Catalog\Models\Product;
+use Modules\Product\Catalog\Models\ProductVariant;
 
 class ProductVariantFactory extends Factory
 {
@@ -15,7 +15,7 @@ class ProductVariantFactory extends Factory
     {
         return [
             'product_id' => Product::factory(),
-            'sku' => 'SKU-' . $this->faker->unique()->randomNumber(6),
+            'sku' => 'SKU-'.$this->faker->unique()->randomNumber(6),
             'shape' => $this->faker->randomElement(['Round', 'Oval', 'Square', 'Rectangle']),
             'length' => $this->faker->randomElement(['30cm', '50cm', '70cm', '100cm']),
             'tonal_palette' => $this->faker->randomElement(['Warm', 'Cool', 'Neutral']),

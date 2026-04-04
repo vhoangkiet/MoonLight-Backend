@@ -5,12 +5,12 @@ namespace Modules\Product\Http\Controllers\Api\Admin;
 use App\Exceptions\DomainException;
 use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\JsonResponse;
-use Modules\Product\Enums\ProductStatus;
+use Modules\Product\Catalog\Enums\ProductStatus;
+use Modules\Product\Catalog\Services\ProductService;
 use Modules\Product\Http\Requests\Admin\StoreProductRequest;
 use Modules\Product\Http\Requests\Admin\UpdateProductRequest;
 use Modules\Product\Http\Resources\ProductDetailResource;
 use Modules\Product\Http\Resources\ProductResource;
-use Modules\Product\Services\ProductService;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -20,9 +20,6 @@ class ProductController extends BaseController
 {
     public function __construct(protected ProductService $productService) {}
 
-    /**
-     * List products with filters.
-     */
     public function index(): JsonResponse
     {
         return $this->execute(function (): JsonResponse {
@@ -52,13 +49,13 @@ class ProductController extends BaseController
         });
     }
 
-    /**
-     * Store a new product.
-     */
     public function store(StoreProductRequest $request): JsonResponse
     {
         return $this->execute(function () use ($request): JsonResponse {
-            $product = $this->productService->createProduct($request->validated());
+            $product = $this->productService->createProduct(
+                $request->validated(),
+                (int) $request->user()->id
+            );
 
             return $this->successResponse(
                 new ProductDetailResource($product),
@@ -68,9 +65,6 @@ class ProductController extends BaseController
         });
     }
 
-    /**
-     * Show product details.
-     */
     public function show(int $id): JsonResponse
     {
         return $this->execute(function () use ($id): JsonResponse {
@@ -80,7 +74,7 @@ class ProductController extends BaseController
                 return $this->errorResponse('Product not found', Response::HTTP_NOT_FOUND);
             }
 
-            $product->load(['category', 'variants', 'discounts']);
+            $product->load(['category', 'variants', 'discounts', 'media']);
 
             return $this->successResponse(
                 new ProductDetailResource($product),
@@ -89,9 +83,6 @@ class ProductController extends BaseController
         });
     }
 
-    /**
-     * Update product.
-     */
     public function update(UpdateProductRequest $request, int $id): JsonResponse
     {
         return $this->execute(function () use ($request, $id): JsonResponse {
@@ -101,10 +92,10 @@ class ProductController extends BaseController
                 return $this->errorResponse('Product not found', Response::HTTP_NOT_FOUND);
             }
 
-            $this->productService->updateProduct($id, $request->validated());
+            $this->productService->updateProduct($id, $request->validated(), (int) $request->user()->id);
 
             $product = $this->productService->find($id);
-            $product?->load(['category', 'variants', 'discounts']);
+            $product?->load(['category', 'variants', 'discounts', 'media']);
 
             return $this->successResponse(
                 new ProductDetailResource($product),
@@ -113,9 +104,6 @@ class ProductController extends BaseController
         });
     }
 
-    /**
-     * Delete product.
-     */
     public function destroy(int $id): JsonResponse
     {
         return $this->execute(function () use ($id): JsonResponse {
@@ -129,9 +117,6 @@ class ProductController extends BaseController
         });
     }
 
-    /**
-     * Update product status.
-     */
     public function updateStatus(int $id): JsonResponse
     {
         return $this->execute(function () use ($id): JsonResponse {
@@ -150,7 +135,7 @@ class ProductController extends BaseController
             }
 
             $product = $this->productService->find($id);
-            $product?->load(['category', 'variants']);
+            $product?->load(['category', 'variants', 'discounts', 'media']);
 
             return $this->successResponse(
                 new ProductDetailResource($product),

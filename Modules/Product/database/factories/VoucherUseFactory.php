@@ -4,8 +4,8 @@ namespace Modules\Product\Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Product\Models\Voucher;
-use Modules\Product\Models\VoucherUse;
+use Modules\Product\Promotion\Models\Voucher;
+use Modules\Product\Promotion\Models\VoucherUse;
 
 class VoucherUseFactory extends Factory
 {

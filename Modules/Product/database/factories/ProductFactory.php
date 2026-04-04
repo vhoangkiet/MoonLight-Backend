@@ -4,9 +4,9 @@ namespace Modules\Product\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Modules\Product\Enums\ProductStatus;
-use Modules\Product\Models\Category;
-use Modules\Product\Models\Product;
+use Modules\Product\Catalog\Enums\ProductStatus;
+use Modules\Product\Catalog\Models\Category;
+use Modules\Product\Catalog\Models\Product;
 
 class ProductFactory extends Factory
 {

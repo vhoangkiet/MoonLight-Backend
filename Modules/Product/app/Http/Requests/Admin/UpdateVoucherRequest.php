@@ -4,6 +4,7 @@ namespace Modules\Product\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Modules\Product\Promotion\Models\Voucher;
 
 class UpdateVoucherRequest extends FormRequest
 {
@@ -39,15 +40,15 @@ class UpdateVoucherRequest extends FormRequest
                 'after_or_equal:valid_from',
                 function ($attribute, $value, $fail) {
                     $validFrom = $this->input('valid_from');
-                    
+
                     // If valid_from not provided in request, get from existing voucher
                     if ($validFrom === null && $this->route('id')) {
-                        $voucher = \Modules\Product\Models\Voucher::find($this->route('id'));
+                        $voucher = Voucher::find($this->route('id'));
                         if ($voucher) {
                             $validFrom = $voucher->valid_from;
                         }
                     }
-                    
+
                     // If we have a valid_from date, validate valid_until against it
                     if ($validFrom && $value && $value < $validFrom) {
                         $fail('The valid until date must be after or equal to the valid from date.');
