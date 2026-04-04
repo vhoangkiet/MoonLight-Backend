@@ -2,13 +2,16 @@
 
 namespace Modules\Product\Http\Controllers\Api\Admin;
 
-use App\Exceptions\DomainException;
 use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Arr;
 use Modules\Product\Catalog\Enums\VariantStatus;
 use Modules\Product\Catalog\Services\ProductVariantService;
+use Modules\Product\Http\Requests\Admin\IndexProductVariantsRequest;
 use Modules\Product\Http\Requests\Admin\StoreProductVariantRequest;
 use Modules\Product\Http\Requests\Admin\UpdateProductVariantRequest;
+use Modules\Product\Http\Requests\Admin\UpdateProductVariantStatusRequest;
+use Modules\Product\Http\Requests\Admin\UpdateProductVariantStockRequest;
 use Modules\Product\Http\Resources\ProductVariantResource;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,15 +25,10 @@ class ProductVariantController extends BaseController
     /**
      * List variants for product.
      */
-    public function index(int $productId): JsonResponse
+    public function index(IndexProductVariantsRequest $request, int $productId): JsonResponse
     {
-        return $this->execute(function () use ($productId): JsonResponse {
-            // Validate product exists
-            $validated = validator(['product_id' => $productId], [
-                'product_id' => ['required', 'integer', 'exists:products,id'],
-            ])->validate();
-
-            $variants = $this->variantService->getByProduct($validated['product_id']);
+        return $this->execute(function () use ($request): JsonResponse {
+            $variants = $this->variantService->getByProduct((int) $request->validated('product_id'));
 
             return $this->successResponse(
                 ProductVariantResource::collection($variants),
@@ -44,13 +42,11 @@ class ProductVariantController extends BaseController
      */
     public function store(StoreProductVariantRequest $request, int $productId): JsonResponse
     {
-        return $this->execute(function () use ($request, $productId): JsonResponse {
-            // Validate product exists
-            $validated = validator(['product_id' => $productId], [
-                'product_id' => ['required', 'integer', 'exists:products,id'],
-            ])->validate();
-
-            $variant = $this->variantService->createVariant($validated['product_id'], $request->validated());
+        return $this->execute(function () use ($request): JsonResponse {
+            $variant = $this->variantService->createVariant(
+                (int) $request->validated('product_id'),
+                Arr::except($request->validated(), ['product_id'])
+            );
 
             return $this->successResponse(
                 new ProductVariantResource($variant),
@@ -119,14 +115,10 @@ class ProductVariantController extends BaseController
     /**
      * Update variant stock.
      */
-    public function updateStock(int $id): JsonResponse
+    public function updateStock(UpdateProductVariantStockRequest $request, int $id): JsonResponse
     {
-        return $this->execute(function () use ($id): JsonResponse {
-            $validated = validator(request()->all(), [
-                'stock' => ['required', 'integer', 'min:0'],
-            ])->validate();
-
-            $updated = $this->variantService->updateStock($id, $validated['stock']);
+        return $this->execute(function () use ($request, $id): JsonResponse {
+            $updated = $this->variantService->updateStock($id, (int) $request->validated('stock'));
 
             if (! $updated) {
                 return $this->errorResponse('Variant not found', Response::HTTP_NOT_FOUND);
@@ -144,17 +136,10 @@ class ProductVariantController extends BaseController
     /**
      * Update variant status.
      */
-    public function updateStatus(int $id): JsonResponse
+    public function updateStatus(UpdateProductVariantStatusRequest $request, int $id): JsonResponse
     {
-        return $this->execute(function () use ($id): JsonResponse {
-            try {
-                $status = VariantStatus::from(request('status'));
-            } catch (\ValueError $e) {
-                throw new DomainException(
-                    'Invalid status value',
-                    Response::HTTP_UNPROCESSABLE_ENTITY
-                );
-            }
+        return $this->execute(function () use ($request, $id): JsonResponse {
+            $status = VariantStatus::from($request->validated('status'));
             $updated = $this->variantService->updateStatus($id, $status);
 
             if (! $updated) {

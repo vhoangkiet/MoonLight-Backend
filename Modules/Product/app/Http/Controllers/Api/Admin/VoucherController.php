@@ -4,6 +4,7 @@ namespace Modules\Product\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\JsonResponse;
+use Modules\Product\Http\Requests\Admin\IndexVoucherRequest;
 use Modules\Product\Http\Requests\Admin\StoreVoucherRequest;
 use Modules\Product\Http\Requests\Admin\UpdateVoucherRequest;
 use Modules\Product\Http\Resources\VoucherResource;
@@ -20,16 +21,10 @@ class VoucherController extends BaseController
     /**
      * List vouchers with filters.
      */
-    public function index(): JsonResponse
+    public function index(IndexVoucherRequest $request): JsonResponse
     {
-        return $this->execute(function (): JsonResponse {
-            $validated = validator(request()->all(), [
-                'search' => ['nullable', 'string', 'max:255'],
-                'is_active' => ['nullable', 'boolean'],
-                'sort_by' => ['nullable', 'string', 'in:code,name,value,valid_from,valid_until,created_at'],
-                'sort_order' => ['nullable', 'string', 'in:asc,desc'],
-                'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
-            ])->validate();
+        return $this->execute(function () use ($request): JsonResponse {
+            $validated = $request->validated();
 
             $filters = [
                 'search' => $validated['search'] ?? null,

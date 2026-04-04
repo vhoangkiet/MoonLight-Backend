@@ -13,9 +13,19 @@ class StoreProductVariantRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $productId = $this->route('productId');
+
+        $this->merge([
+            'product_id' => is_numeric($productId) ? (int) $productId : $productId,
+        ]);
+    }
+
     public function rules(): array
     {
         return [
+            'product_id' => ['required', 'integer', 'exists:products,id'],
             'sku' => ['nullable', 'string', 'max:50', 'unique:product_variants,sku'],
             'shape' => ['required', 'string', 'max:50'],
             'length' => ['required', 'string', 'max:50'],

@@ -2,13 +2,14 @@
 
 namespace Modules\Product\Http\Controllers\Api\Admin;
 
-use App\Exceptions\DomainException;
 use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\JsonResponse;
 use Modules\Product\Catalog\Enums\ProductStatus;
 use Modules\Product\Catalog\Services\ProductService;
+use Modules\Product\Http\Requests\Admin\IndexProductRequest;
 use Modules\Product\Http\Requests\Admin\StoreProductRequest;
 use Modules\Product\Http\Requests\Admin\UpdateProductRequest;
+use Modules\Product\Http\Requests\Admin\UpdateProductStatusRequest;
 use Modules\Product\Http\Resources\ProductDetailResource;
 use Modules\Product\Http\Resources\ProductResource;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,17 +21,10 @@ class ProductController extends BaseController
 {
     public function __construct(protected ProductService $productService) {}
 
-    public function index(): JsonResponse
+    public function index(IndexProductRequest $request): JsonResponse
     {
-        return $this->execute(function (): JsonResponse {
-            $validated = validator(request()->all(), [
-                'search' => ['nullable', 'string', 'max:255'],
-                'status' => ['nullable', 'string', 'in:active,inactive'],
-                'category_id' => ['nullable', 'integer', 'exists:categories,id'],
-                'sort_by' => ['nullable', 'string', 'in:name,created_at,id'],
-                'sort_order' => ['nullable', 'string', 'in:asc,desc'],
-                'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
-            ])->validate();
+        return $this->execute(function () use ($request): JsonResponse {
+            $validated = $request->validated();
 
             $filters = [
                 'search' => $validated['search'] ?? null,
@@ -117,17 +111,10 @@ class ProductController extends BaseController
         });
     }
 
-    public function updateStatus(int $id): JsonResponse
+    public function updateStatus(UpdateProductStatusRequest $request, int $id): JsonResponse
     {
-        return $this->execute(function () use ($id): JsonResponse {
-            try {
-                $status = ProductStatus::from(request('status'));
-            } catch (\ValueError $e) {
-                throw new DomainException(
-                    'Invalid status value',
-                    Response::HTTP_UNPROCESSABLE_ENTITY
-                );
-            }
+        return $this->execute(function () use ($request, $id): JsonResponse {
+            $status = ProductStatus::from($request->validated('status'));
             $updated = $this->productService->updateStatus($id, $status);
 
             if (! $updated) {
