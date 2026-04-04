@@ -4,6 +4,7 @@ namespace Modules\Product\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\JsonResponse;
+use Modules\Product\Http\Requests\Admin\ManageDiscountProductRequest;
 use Modules\Product\Http\Requests\Admin\StoreDiscountRequest;
 use Modules\Product\Http\Requests\Admin\UpdateDiscountRequest;
 use Modules\Product\Http\Resources\DiscountResource;
@@ -107,13 +108,10 @@ class DiscountController extends BaseController
     /**
      * Apply discount to product.
      */
-    public function applyToProduct(int $id): JsonResponse
+    public function applyToProduct(ManageDiscountProductRequest $request, int $id): JsonResponse
     {
-        return $this->execute(function () use ($id): JsonResponse {
-            $validated = validator(request()->all(), [
-                'product_id' => ['required', 'integer', 'exists:products,id'],
-                'variant_id' => ['nullable', 'integer', 'exists:product_variants,id'],
-            ])->validate();
+        return $this->execute(function () use ($request, $id): JsonResponse {
+            $validated = $request->validated();
 
             $this->discountService->applyToProduct($id, $validated['product_id'], $validated['variant_id'] ?? null);
 
@@ -124,13 +122,10 @@ class DiscountController extends BaseController
     /**
      * Remove discount from product.
      */
-    public function removeFromProduct(int $id): JsonResponse
+    public function removeFromProduct(ManageDiscountProductRequest $request, int $id): JsonResponse
     {
-        return $this->execute(function () use ($id): JsonResponse {
-            $validated = validator(request()->all(), [
-                'product_id' => ['required', 'integer', 'exists:products,id'],
-                'variant_id' => ['nullable', 'integer', 'exists:product_variants,id'],
-            ])->validate();
+        return $this->execute(function () use ($request, $id): JsonResponse {
+            $validated = $request->validated();
 
             $this->discountService->removeFromProduct($id, $validated['product_id'], $validated['variant_id'] ?? null);
 

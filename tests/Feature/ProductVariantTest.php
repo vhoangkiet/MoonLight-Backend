@@ -53,8 +53,8 @@ class ProductVariantTest extends TestCase
         $response = $this->actingAs($this->admin, 'api')
             ->getJson('/api/v1/admin/products/invalid/variants');
 
-        // API throws TypeError before validation for non-integer productId
-        $response->assertStatus(500);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors('product_id');
     }
 
     public function test_returns_422_for_nonexistent_product(): void
@@ -365,10 +365,7 @@ class ProductVariantTest extends TestCase
             ]);
 
         $response->assertStatus(422)
-            ->assertJson([
-                'success' => false,
-                'message' => 'Invalid status value',
-            ]);
+            ->assertJsonValidationErrors('status');
     }
 
     public function test_update_status_validates_missing_status(): void

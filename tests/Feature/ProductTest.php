@@ -316,10 +316,7 @@ class ProductTest extends TestCase
             ]);
 
         $response->assertStatus(422)
-            ->assertJson([
-                'success' => false,
-                'message' => 'Invalid status value',
-            ]);
+            ->assertJsonValidationErrors('status');
     }
 
     public function test_update_status_validates_missing_status(): void

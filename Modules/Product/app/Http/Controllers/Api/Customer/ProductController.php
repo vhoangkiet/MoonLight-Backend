@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\JsonResponse;
 use Modules\Product\Catalog\Enums\ProductStatus;
 use Modules\Product\Catalog\Services\ProductService;
+use Modules\Product\Http\Requests\Customer\CalculateProductPriceRequest;
+use Modules\Product\Http\Requests\Customer\IndexCustomerProductRequest;
 use Modules\Product\Http\Resources\ProductDetailResource;
 use Modules\Product\Http\Resources\ProductResource;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,14 +22,10 @@ class ProductController extends BaseController
     /**
      * List active products.
      */
-    public function index(): JsonResponse
+    public function index(IndexCustomerProductRequest $request): JsonResponse
     {
-        return $this->execute(function (): JsonResponse {
-            $validated = validator(request()->all(), [
-                'search' => ['nullable', 'string', 'max:255'],
-                'category_id' => ['nullable', 'integer', 'exists:categories,id'],
-                'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
-            ])->validate();
+        return $this->execute(function () use ($request): JsonResponse {
+            $validated = $request->validated();
 
             $filters = [
                 'status' => ProductStatus::ACTIVE->value,
@@ -66,14 +64,10 @@ class ProductController extends BaseController
     /**
      * Calculate product price with discount and voucher.
      */
-    public function calculatePrice(): JsonResponse
+    public function calculatePrice(CalculateProductPriceRequest $request): JsonResponse
     {
-        return $this->execute(function (): JsonResponse {
-            $validated = validator(request()->all(), [
-                'product_id' => ['required', 'integer'],
-                'variant_id' => ['required', 'integer'],
-                'voucher_code' => ['nullable', 'string'],
-            ])->validate();
+        return $this->execute(function () use ($request): JsonResponse {
+            $validated = $request->validated();
 
             $productId = $validated['product_id'];
             $variantId = $validated['variant_id'];

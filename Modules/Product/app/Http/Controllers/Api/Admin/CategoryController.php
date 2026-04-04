@@ -4,9 +4,9 @@ namespace Modules\Product\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Modules\Product\Catalog\Enums\CategoryStatus;
 use Modules\Product\Catalog\Services\CategoryService;
+use Modules\Product\Http\Requests\Admin\CategoryTreeRequest;
 use Modules\Product\Http\Requests\Admin\IndexCategoryRequest;
 use Modules\Product\Http\Requests\Admin\ReorderCategoriesRequest;
 use Modules\Product\Http\Requests\Admin\StoreCategoryRequest;
@@ -26,13 +26,6 @@ class CategoryController extends BaseController
 
     /**
      * List categories with filters.
-     *
-     * @queryParam search string Search by name or slug. Example: "electronics"
-     * @queryParam status string Filter by status (active, inactive). Example: "active"
-     * @queryParam parent_id integer Filter by parent category. Example: 1
-     * @queryParam sort_by string Sort field. Example: "position"
-     * @queryParam sort_order string Sort order (asc, desc). Example: "asc"
-     * @queryParam per_page int Items per page. Example: 15
      */
     public function index(IndexCategoryRequest $request): JsonResponse
     {
@@ -57,12 +50,10 @@ class CategoryController extends BaseController
     /**
      * Get category tree structure.
      */
-    public function tree(Request $request): JsonResponse
+    public function tree(CategoryTreeRequest $request): JsonResponse
     {
         return $this->execute(function () use ($request): JsonResponse {
-            $validated = validator($request->all(), [
-                'status' => ['nullable', 'string', 'in:active,inactive'],
-            ])->validate();
+            $validated = $request->validated();
 
             $filters = [];
             if (isset($validated['status'])) {
