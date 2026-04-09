@@ -7,6 +7,23 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class RefreshTokenRequest extends BaseRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $refreshToken = $this->input('refresh_token');
+
+        if (is_string($refreshToken) && $refreshToken !== '') {
+            return;
+        }
+
+        $cookieRefreshToken = $this->cookie('auth_token');
+
+        if (is_string($cookieRefreshToken) && $cookieRefreshToken !== '') {
+            $this->merge([
+                'refresh_token' => $cookieRefreshToken,
+            ]);
+        }
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      */
