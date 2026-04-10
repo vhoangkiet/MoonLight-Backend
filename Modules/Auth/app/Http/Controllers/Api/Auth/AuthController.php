@@ -112,7 +112,10 @@ class AuthController extends BaseController
             $user = auth()->user();
             $this->authService->logout($user);
 
-            return $this->successResponse(null, 'Logged out successfully.');
+            return response()->json([
+                'success' => true,
+                'message' => 'Logged out'
+            ])->withCookie(cookie()->forget('auth_token'));
         });
     }
 
