@@ -66,6 +66,10 @@ Route::middleware(['auth:api'])
             ->name('profile.show');
         Route::post('profile', [ProfileController::class, 'update'])
             ->name('profile.update');
+        Route::post('profile/avatar', [ProfileController::class, 'uploadAvatar'])
+            ->name('profile.avatar.store');
+        Route::delete('profile/avatar', [ProfileController::class, 'removeAvatar'])
+            ->name('profile.avatar.destroy');
         Route::put('profile/password', [ProfileController::class, 'changePassword'])
             ->name('profile.change-password');
 

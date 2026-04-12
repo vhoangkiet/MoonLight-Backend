@@ -4,7 +4,7 @@ namespace Modules\User\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProfileRequest extends FormRequest
+class UploadProfileAvatarRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,9 +14,7 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => ['sometimes', 'string', 'max:255'],
-            'last_name' => ['sometimes', 'string', 'max:255'],
-            'avatar' => ['prohibited'],
+            'avatar' => ['required', 'image', 'mimes:jpeg,png,webp', 'max:5000'],
         ];
     }
 }

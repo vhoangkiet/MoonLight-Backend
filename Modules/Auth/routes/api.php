@@ -59,6 +59,10 @@ Route::prefix('v1')->group(function () {
 
         Route::post('profile', [AuthController::class, 'updateProfile'])
             ->name('auth.profile.update');
+        Route::post('profile/avatar', [AuthController::class, 'uploadProfileAvatar'])
+            ->name('auth.profile.avatar.store');
+        Route::delete('profile/avatar', [AuthController::class, 'removeProfileAvatar'])
+            ->name('auth.profile.avatar.destroy');
 
         // Email Verification (Authenticated)
         Route::post('email/resend', [VerificationController::class, 'resend'])

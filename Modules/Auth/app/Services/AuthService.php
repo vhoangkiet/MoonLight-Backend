@@ -131,11 +131,11 @@ class AuthService
     }
 
     /**
-     * Update user profile data and optionally upload avatar.
+     * Update user profile fields (name). Avatar is managed via dedicated endpoints.
      *
      * @param  array{first_name?: string, last_name?: string}  $data
      */
-    public function updateProfile(User $user, array $data, ?UploadedFile $avatar = null): User
+    public function updateProfile(User $user, array $data): User
     {
         $updateData = collect($data)->only(['first_name', 'last_name'])->toArray();
 
@@ -147,11 +147,25 @@ class AuthService
 
         $this->userRepository->update($user->id, $updateData);
 
-        if ($avatar) {
-            $user->addMedia($avatar)->toMediaCollection('avatar');
-        }
-
         Log::info('User profile updated', ['user_id' => $user->id]);
+
+        return $user->fresh();
+    }
+
+    public function uploadProfileAvatar(User $user, UploadedFile $avatar): User
+    {
+        $user->addMedia($avatar)->toMediaCollection('avatar');
+
+        Log::info('User profile avatar uploaded', ['user_id' => $user->id]);
+
+        return $user->fresh();
+    }
+
+    public function removeProfileAvatar(User $user): User
+    {
+        $user->clearMediaCollection('avatar');
+
+        Log::info('User profile avatar removed', ['user_id' => $user->id]);
 
         return $user->fresh();
     }

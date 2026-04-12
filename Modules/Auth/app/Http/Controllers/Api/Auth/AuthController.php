@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Cookie;
 use Modules\Auth\Http\Requests\Auth\LoginRequest;
 use Modules\Auth\Http\Requests\Auth\RefreshTokenRequest;
 use Modules\Auth\Http\Requests\Auth\RegisterRequest;
+use Modules\Auth\Http\Requests\Auth\RemoveProfileAvatarRequest;
 use Modules\Auth\Http\Requests\Auth\UpdateProfileRequest;
+use Modules\Auth\Http\Requests\Auth\UploadProfileAvatarRequest;
 use Modules\Auth\Http\Resources\AuthResource;
 use Modules\Auth\Services\AuthService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -114,7 +116,7 @@ class AuthController extends BaseController
 
             return response()->json([
                 'success' => true,
-                'message' => 'Logged out'
+                'message' => 'Logged out',
             ])->withCookie(cookie()->forget('auth_token'));
         });
     }
@@ -138,7 +140,7 @@ class AuthController extends BaseController
     /**
      * Update Profile.
      *
-     * Allow updating name and uploading avatar image.
+     * Update first and last name. Use profile/avatar routes for the avatar.
      */
     public function updateProfile(UpdateProfileRequest $request): JsonResponse
     {
@@ -149,12 +151,50 @@ class AuthController extends BaseController
             $updatedUser = $this->authService->updateProfile(
                 $user,
                 $request->validated(),
-                $request->file('avatar')
             );
 
             return $this->successResponse(
                 new AuthResource($updatedUser->load('roles', 'media')),
                 'Profile updated successfully.'
+            );
+        });
+    }
+
+    /**
+     * Upload or replace the authenticated user's avatar.
+     */
+    public function uploadProfileAvatar(UploadProfileAvatarRequest $request): JsonResponse
+    {
+        return $this->execute(function () use ($request): JsonResponse {
+            /** @var User $user */
+            $user = auth()->user();
+
+            $updatedUser = $this->authService->uploadProfileAvatar(
+                $user,
+                $request->file('avatar')
+            );
+
+            return $this->successResponse(
+                new AuthResource($updatedUser->load('roles', 'media')),
+                'Avatar updated successfully.'
+            );
+        });
+    }
+
+    /**
+     * Remove the authenticated user's avatar.
+     */
+    public function removeProfileAvatar(RemoveProfileAvatarRequest $request): JsonResponse
+    {
+        return $this->execute(function (): JsonResponse {
+            /** @var User $user */
+            $user = auth()->user();
+
+            $updatedUser = $this->authService->removeProfileAvatar($user);
+
+            return $this->successResponse(
+                new AuthResource($updatedUser->load('roles', 'media')),
+                'Avatar removed successfully.'
             );
         });
     }

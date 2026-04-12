@@ -25,7 +25,7 @@ class UpdateProfileRequest extends BaseRequest
         return [
             'first_name' => ['sometimes', 'string', 'max:255'],
             'last_name' => ['sometimes', 'string', 'max:255'],
-            'avatar' => ['sometimes', 'image', 'mimes:jpeg,png,webp', 'max:2048'],
+            'avatar' => ['prohibited'],
         ];
     }
 }
