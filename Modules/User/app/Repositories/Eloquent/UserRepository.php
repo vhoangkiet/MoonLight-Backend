@@ -24,14 +24,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         $query = $this->model->newQuery()->with(['roles']);
 
-        // Search by name, email, phone
+        // Search by name, email
         if (! empty($filters['search'])) {
             $search = $filters['search'];
             $query->where(function ($q) use ($search) {
                 $q->where('first_name', 'like', "%{$search}%")
                     ->orWhere('last_name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 

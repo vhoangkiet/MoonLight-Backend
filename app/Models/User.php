@@ -31,7 +31,6 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, OAuthen
         'last_name',
         'name',
         'email',
-        'phone',
         'avatar',
         'password',
         'status',
@@ -110,6 +109,8 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail, OAuthen
      */
     public function getAvatarAttribute(): ?string
     {
-        return $this->getFirstMediaUrl('avatar');
+        $this->loadMissing('media');
+
+        return $this->getFirstMediaUrl('avatar') ?: null;
     }
 }

@@ -57,7 +57,7 @@ Route::prefix('v1')->group(function () {
         Route::get('profile', [AuthController::class, 'profile'])
             ->name('auth.profile');
 
-        Route::put('profile', [AuthController::class, 'updateProfile'])
+        Route::post('profile', [AuthController::class, 'updateProfile'])
             ->name('auth.profile.update');
 
         // Email Verification (Authenticated)

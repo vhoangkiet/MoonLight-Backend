@@ -34,7 +34,6 @@ class ProfileController extends BaseController
      * @bodyParam first_name string User first name. Example: "John"
      * @bodyParam last_name string User last name. Example: "Doe"
      * @bodyParam email string User email. Example: "john@example.com"
-     * @bodyParam phone string User phone. Example: "+1234567890"
      * @bodyParam avatar file Avatar image (jpeg, png, webp). Max 2MB
      *
      * @response array{data: UserResource, message: string}

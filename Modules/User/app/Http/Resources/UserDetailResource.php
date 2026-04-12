@@ -16,7 +16,6 @@ class UserDetailResource extends JsonResource
             'full_name' => $this->full_name,
             'name' => $this->name,
             'email' => $this->email,
-            'phone' => $this->phone,
             'avatar' => $this->avatar,
             'status' => $this->status,
             'roles' => RoleResource::collection($this->whenLoaded('roles')),

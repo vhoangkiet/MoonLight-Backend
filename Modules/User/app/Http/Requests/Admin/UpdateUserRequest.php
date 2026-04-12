@@ -20,7 +20,6 @@ class UpdateUserRequest extends FormRequest
             'first_name' => ['sometimes', 'string', 'max:255'],
             'last_name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'email', Rule::unique('users')->ignore($userId)],
-            'phone' => ['nullable', 'string', 'max:20'],
             'status' => ['sometimes', 'in:active,inactive,blocked'],
             'role' => ['nullable', 'string', 'exists:roles,name'],
         ];

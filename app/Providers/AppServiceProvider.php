@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         if (app()->environment('local')) {
-            Passport::tokensExpireIn(CarbonInterval::minutes(1));
+            Passport::tokensExpireIn(CarbonInterval::minutes(5));
         } else {
             Passport::tokensExpireIn(CarbonInterval::days(15));
         }

@@ -26,7 +26,7 @@ class UserController extends BaseController
      *
      * @response array{data: UserResource[], meta: array{current_page: int, last_page: int, per_page: int, total: int}}
      *
-     * @queryParam search string Search by name, email, phone. Example: "john"
+     * @queryParam search string Search by name, email. Example: "john"
      * @queryParam status string Filter by status (active, inactive, blocked). Example: "active"
      * @queryParam role string Filter by role (admin, staff, customer). Example: "customer"
      * @queryParam sort_by string Sort field. Example: "created_at"
@@ -56,7 +56,6 @@ class UserController extends BaseController
      * @bodyParam first_name string required User first name. Example: "John"
      * @bodyParam last_name string required User last name. Example: "Doe"
      * @bodyParam email string required User email. Example: "john@example.com"
-     * @bodyParam phone string User phone. Example: "+1234567890"
      * @bodyParam password string User password. Example: "password123"
      * @bodyParam status string User status (active, inactive, blocked). Example: "active"
      * @bodyParam role string User role (admin, staff, customer). Example: "customer"
@@ -102,7 +101,6 @@ class UserController extends BaseController
      * @bodyParam first_name string User first name. Example: "John"
      * @bodyParam last_name string User last name. Example: "Doe"
      * @bodyParam email string User email. Example: "john@example.com"
-     * @bodyParam phone string User phone. Example: "+1234567890"
      * @bodyParam status string User status. Example: "active"
      * @bodyParam role string User role. Example: "customer"
      *

@@ -64,7 +64,7 @@ Route::middleware(['auth:api'])
         // Profile Management
         Route::get('profile', [ProfileController::class, 'show'])
             ->name('profile.show');
-        Route::put('profile', [ProfileController::class, 'update'])
+        Route::post('profile', [ProfileController::class, 'update'])
             ->name('profile.update');
         Route::put('profile/password', [ProfileController::class, 'changePassword'])
             ->name('profile.change-password');
